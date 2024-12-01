@@ -1,35 +1,48 @@
 blueprint:
   name: Light Party Mode
-  description: 'Create a party effect with your lights by cycling through bright saturated colors.
+  description: 'Create a disco-like effect with your RGB lights.
     
-    Version: 0.0.6
+    Version: 0.1.0
     
     Features:
-    - Select which lights to control
-    - Configurable color transition time
-    - Adjustable brightness levels
-    - Return to previous state or scene when turned off
-    - Controlled by an input_boolean switch'
+    - Select lights for color effects
+    - Select lights to turn off during party mode
+    - Configurable color transition and switch timing
+    - Adjustable or fixed brightness levels
+    - Return to multiple scenes when turned off
+    - Optimized for Philips Hue lights
+    
+    Note: Uses only bright saturated colors for maximum effect'
   domain: automation
   input:
     trigger_boolean:
-      name: Control Switch
-      description: The input_boolean that controls the party mode
+      name: Party Mode Switch
+      description: Input boolean or switch that controls the party mode
       selector:
         entity:
           filter:
             - domain: input_boolean
             - domain: switch
-    lights:
-      name: Lights
-      description: Select the lights you want to control
+    party_lights:
+      name: Party Lights
+      description: Select the lights that should show the color effects
       selector:
-        entity:
-          domain: light
-          multiple: true
-    transition_time:
-      name: Color Transition Time
-      description: Time in seconds between color changes (1-300)
+        target:
+          entity:
+            domain: light
+            supported_color_modes: 
+              - rgb
+    off_lights:
+      name: Lights to Turn Off
+      description: Select lights that should turn off during party mode
+      selector:
+        target:
+          entity:
+            domain: light
+      default: []
+    switch_time:
+      name: Color Switch Time
+      description: Time between color changes (1-300 seconds)
       default: 5
       selector:
         number:
@@ -38,6 +51,17 @@ blueprint:
           unit_of_measurement: seconds
           mode: slider
           step: 1
+    transition_time:
+      name: Transition Time
+      description: Time to transition between colors (0-10 seconds)
+      default: 2
+      selector:
+        number:
+          min: 0
+          max: 10
+          unit_of_measurement: seconds
+          mode: slider
+          step: 0.5
     min_brightness:
       name: Minimum Brightness
       description: Minimum brightness level (1-100)
@@ -62,7 +86,7 @@ blueprint:
           step: 1
     fixed_brightness:
       name: Fixed Brightness
-      description: Set a fixed brightness level (0 to disable fixed brightness)
+      description: Set a fixed brightness level (0 to use min/max range)
       default: 0
       selector:
         number:
@@ -71,77 +95,88 @@ blueprint:
           unit_of_measurement: '%'
           mode: slider
           step: 1
-    return_scene:
-      name: Return Scene(s)
-      description: Optional - Scene(s) to activate when party mode is turned off (leave empty to return to previous state)
-      default: null
+    return_scenes:
+      name: Return Scenes
+      description: Scenes to activate when party mode turns off (in order)
       selector:
         entity:
           domain: scene
           multiple: true
 
 variables:
-  fixed_brightness: !input fixed_brightness
-  min_brightness: !input min_brightness
-  max_brightness: !input max_brightness
-  target_lights: !input lights
-  disco_colors:
+  # Bright saturated colors
+  party_colors:
     - [255, 0, 0]     # Red
     - [255, 0, 255]   # Magenta
     - [0, 0, 255]     # Blue
     - [0, 255, 255]   # Cyan
     - [0, 255, 0]     # Green
     - [255, 255, 0]   # Yellow
+    - [255, 128, 0]   # Orange
+    - [255, 0, 128]   # Pink
 
 trigger:
   - platform: state
     entity_id: !input trigger_boolean
-    to: "on"
 
 action:
-  # Store initial state
+  # Store initial states
   - service: scene.create
     data:
       scene_id: before_party
-      snapshot_entities: "{{ target_lights }}"
+      snapshot_entities: "{{ expand(party_lights.entity_id) | join(',') }}"
+
+  # Turn off selected lights
+  - if:
+      - condition: template
+        value_template: "{{ off_lights != None and off_lights != [] }}"
+    then:
+      - service: light.turn_off
+        target: !input off_lights
+        data:
+          transition: 1
 
   # Main party sequence
-  - repeat:
-      while:
-        - condition: state
-          entity_id: !input trigger_boolean
-          state: "on"
-      sequence:
-        - service: light.turn_on
-          target:
-            entity_id: "{{ target_lights }}"
-          data:
-            rgb_color: "{{ disco_colors[range(0, disco_colors | length - 1) | random] }}"
-            brightness_pct: >
-              {% if fixed_brightness > 0 %}
-                {{ fixed_brightness }}
-              {% else %}
-                {{ range(min_brightness|int, max_brightness|int)|random }}
-              {% endif %}
-            transition: "{{ transition_time|int / 2 }}"
-        - delay:
-            seconds: "{{ transition_time }}"
+  - if:
+      - condition: state
+        entity_id: !input trigger_boolean
+        state: 'on'
+    then:
+      - repeat:
+          sequence:
+            # Assign random colors to each light
+            - service: light.turn_on
+              target: !input party_lights
+              data:
+                brightness_pct: >
+                  {% if fixed_brightness > 0 %}
+                    {{ fixed_brightness }}
+                  {% else %}
+                    {{ range(min_brightness|int, max_brightness|int)|random }}
+                  {% endif %}
+                rgb_color: "{{ party_colors[range(0, party_colors|length - 1)|random] }}"
+                transition: "{{ transition_time }}"
+            - delay:
+                seconds: "{{ switch_time }}"
+          until:
+            - condition: state
+              entity_id: !input trigger_boolean
+              state: 'off'
 
-  # Return to previous state or scene
-  - choose:
-    - conditions:
+  # Return to scenes or previous state
+  - if:
       - condition: template
-        value_template: "{{ return_scene != None }}"
-      sequence:
-        - repeat:
-            count: "{{ return_scene | length }}"
-            sequence:
-              - service: scene.turn_on
-                target:
-                  entity_id: "{{ return_scene[repeat.index - 1] }}"
-                data:
-                  transition: 2
-    default:
+        value_template: "{{ return_scenes != None and return_scenes != [] }}"
+    then:
+      - repeat:
+          count: "{{ return_scenes | length }}"
+          sequence:
+            - service: scene.turn_on
+              target:
+                entity_id: "{{ return_scenes[repeat.index - 1] }}"
+              data:
+                transition: 2
+    else:
       - service: scene.turn_on
         target:
           entity_id: scene.before_party
