@@ -96,64 +96,52 @@ max_exceeded: silent
 trigger:
   - platform: state
     entity_id: !input trigger_boolean
+    to: "on"
 
 action:
   # Store initial state
   - service: scene.create
     data:
       scene_id: before_party
-      snapshot_entities: !input lights
+      snapshot_entities: "{{ target_lights }}"
 
   # Main party sequence
+  - repeat:
+      sequence:
+        - service: light.turn_on
+          target:
+            entity_id: "{{ target_lights }}"
+          data:
+            rgb_color: "{{ disco_colors[repeat.index-1] }}"
+            brightness_pct: >
+              {% if fixed_brightness > 0 %}
+                {{ fixed_brightness }}
+              {% else %}
+                {{ range(min_brightness|int, max_brightness|int)|random }}
+              {% endif %}
+            transition: "{{ transition_time|int / 2 }}"
+        - delay:
+            seconds: "{{ transition_time }}"
+      until:
+        - condition: state
+          entity_id: !input trigger_boolean
+          state: "off"
+
+  # Return to previous state or scene
   - choose:
       - conditions:
-          - condition: state
-            entity_id: !input trigger_boolean
-            state: 'on'
+          - condition: template
+            value_template: "{{ return_scene != None }}"
         sequence:
           - repeat:
-              while:
-                - condition: state
-                  entity_id: !input trigger_boolean
-                  state: 'on'
+              count: "{{ return_scene | length }}"
               sequence:
-                - repeat:
-                    count: "{{ disco_colors|length }}"
-                    sequence:
-                      - service: light.turn_on
-                        target:
-                          entity_id: "{{ lights }}"
-                        data:
-                          rgb_color: "{{ disco_colors[repeat.index-1] }}"
-                          brightness_pct: >
-                            {% if fixed_brightness > 0 %}
-                              {{ fixed_brightness }}
-                            {% else %}
-                              {{ range(min_brightness|int, max_brightness|int)|random }}
-                            {% endif %}
-                          transition: "{{ transition_time|int / 2 }}"
-                      - delay:
-                          seconds: !input transition_time
-
-      - conditions:
-          - condition: state
-            entity_id: !input trigger_boolean
-            state: 'off'
-        sequence:
-          - choose:
-              - conditions:
-                  - condition: template
-                    value_template: "{{ return_scene != None }}"
-                sequence:
-                  - repeat:
-                      count: "{{ return_scene | length }}"
-                      sequence:
-                        - service: scene.turn_on
-                          target:
-                            entity_id: "{{ return_scene[repeat.index - 1] }}"
-                          data:
-                            transition: 2
-            default:
-              - service: scene.turn_on
-                target:
-                  entity_id: scene.before_party
+                - service: scene.turn_on
+                  target:
+                    entity_id: "{{ return_scene[repeat.index - 1] }}"
+                  data:
+                    transition: 2
+      default:
+        - service: scene.turn_on
+          target:
+            entity_id: scene.before_party
