@@ -68,10 +68,10 @@ blueprint:
     return_scene:
       name: Return Scene
       description: Optional - Scene to activate when party mode is turned off (leave empty to return to previous state)
+      default: null
       selector:
         entity:
           domain: scene
-          required: false
 
 variables:
   fixed_brightness: !input fixed_brightness
