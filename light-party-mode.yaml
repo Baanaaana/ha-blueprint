@@ -94,11 +94,12 @@ trigger:
 action:
   - variables:
       previous_states: >
-        {% set states = {} %}
-        {% for entity in expand(this.triggered_entity_id) %}
-          {% set states = states|combine({entity: state_attr(entity, 'all')|default({})}) %}
+        {% set ns = namespace(states={}) %}
+        {% for light in expand('!input lights') %}
+          {% set ns.states = dict(ns.states) %}
+          {% set ns.states = dict(ns.states, **{light: state_attr(light, 'all')}) %}
         {% endfor %}
-        {{ states }}
+        {{ ns.states | to_json }}
 
   - choose:
       - conditions:
