@@ -66,7 +66,9 @@ blueprint:
       name: Return Scene
       description: Optional - Scene to activate when party mode is turned off (leave empty to return to previous state)
       selector:
-        scene: {}
+        entity:
+          domain: scene
+          multiple: false
 
 variables:
   fixed_brightness: !input fixed_brightness
@@ -140,7 +142,7 @@ action:
                     value_template: "{{ return_scene != None }}"
                 sequence:
                   - service: scene.turn_on
-                    data:
+                    target:
                       entity_id: !input return_scene
             default:
               - service: light.turn_on
