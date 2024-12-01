@@ -15,14 +15,16 @@ blueprint:
       description: The input_boolean that controls the party mode
       selector:
         entity:
-          domain: input_boolean
+          filter:
+            - domain: input_boolean
+            - domain: switch
     lights:
       name: Lights
       description: Select the lights you want to control
       selector:
-        target:
-          entity:
-            domain: light
+        entity:
+          domain: light
+          multiple: true
     transition_time:
       name: Color Transition Time
       description: Time in seconds between color changes (1-300)
@@ -90,18 +92,14 @@ trigger:
     entity_id: !input trigger_boolean
 
 action:
-  - variables:
-      previous_states: >
-        {% set result = {} %}
-        {% for entity in expand('!input lights').entity_id %}
-          {% set attr = state_attr(entity, 'brightness') %}
-          {% set rgb = state_attr(entity, 'rgb_color') %}
-          {% if attr is not none and rgb is not none %}
-            {% set result = result | combine({entity: {'brightness': attr, 'rgb_color': rgb}}) %}
-          {% endif %}
-        {% endfor %}
-        {{ result | to_json }}
+  # Store initial state
+  - scene: create
+    metadata: {}
+    data:
+      scene_id: before_party
+      snapshot_entities: "{{ lights }}"
 
+  # Main party sequence
   - choose:
       - conditions:
           - condition: state
@@ -118,7 +116,8 @@ action:
                     count: "{{ disco_colors|length }}"
                     sequence:
                       - service: light.turn_on
-                        target: !input lights
+                        target:
+                          entity_id: "{{ lights }}"
                         data:
                           rgb_color: "{{ disco_colors[repeat.index-1] }}"
                           brightness_pct: >
@@ -142,13 +141,9 @@ action:
                     value_template: "{{ return_scene != None }}"
                 sequence:
                   - service: scene.turn_on
-                    data:
-                      transition: 2
+                    target:
                       entity_id: "{{ return_scene }}"
             default:
-              - service: light.turn_on
-                target: !input lights
-                data:
-                  brightness: "{{ previous_states | from_json | default({}, true) }}"
-                  rgb_color: "{{ previous_states | from_json | default({}, true) }}"
-                  transition: 2
+              - service: scene.turn_on
+                target:
+                  entity_id: scene.before_party
