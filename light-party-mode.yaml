@@ -2,7 +2,7 @@ blueprint:
   name: Light Party Mode
   description: 'Create a party effect with your lights by cycling through bright saturated colors.
     
-    Version: 0.0.1
+    Version: 0.0.2
     
     Features:
     - Select which lights to control
