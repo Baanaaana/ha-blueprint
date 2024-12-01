@@ -2,6 +2,8 @@ blueprint:
   name: Light Party Mode
   description: 'Create a party effect with your lights by cycling through bright saturated colors.
     
+    Version: 0.0.1
+    
     Features:
     - Select which lights to control
     - Configurable color transition time
@@ -82,6 +84,7 @@ variables:
   fixed_brightness: !input fixed_brightness
   min_brightness: !input min_brightness
   max_brightness: !input max_brightness
+  target_lights: !input lights
   disco_colors:
     - [255, 0, 0]     # Red
     - [255, 0, 255]   # Magenta
