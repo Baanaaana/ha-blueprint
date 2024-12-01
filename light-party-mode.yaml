@@ -2,7 +2,7 @@ blueprint:
   name: Light Party Mode
   description: 'Create a disco-like effect with your RGB lights.
     
-    Version: 0.1.0
+    Version: 0.1.1
     
     Features:
     - Select lights for color effects
@@ -102,6 +102,12 @@ blueprint:
           multiple: true
 
 variables:
+  # Input variables
+  transition_time: !input transition_time
+  switch_time: !input switch_time
+  min_brightness: !input min_brightness
+  max_brightness: !input max_brightness
+  fixed_brightness: !input fixed_brightness
   # Bright saturated colors
   party_colors:
     - [255, 0, 0]     # Red
@@ -122,7 +128,7 @@ action:
   - service: scene.create
     data:
       scene_id: before_party
-      snapshot_entities: "{{ expand(party_lights.entity_id) | join(',') }}"
+      snapshot_entities: !input party_lights
 
   # Turn off selected lights
   - if:
