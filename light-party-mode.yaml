@@ -94,12 +94,15 @@ trigger:
 action:
   - variables:
       previous_states: >
-        {% set ns = namespace(states={}) %}
-        {% for light in expand('!input lights') %}
-          {% set ns.states = dict(ns.states) %}
-          {% set ns.states = dict(ns.states, **{light: state_attr(light, 'all')}) %}
+        {% set result = {} %}
+        {% for entity in expand('!input lights') %}
+          {% set attr = state_attr(entity, 'brightness') %}
+          {% set rgb = state_attr(entity, 'rgb_color') %}
+          {% if attr is not none and rgb is not none %}
+            {% set result = result.update({entity: {'brightness': attr, 'rgb_color': rgb}}) %}
+          {% endif %}
         {% endfor %}
-        {{ ns.states | to_json }}
+        {{ result }}
 
   - choose:
       - conditions:
