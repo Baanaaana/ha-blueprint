@@ -28,9 +28,9 @@ blueprint:
       description: IKEA STYRBAR remote to use
       selector:
         device:
-          integration: zha
-          manufacturer: IKEA of Sweden
-          model: Remote Control N2
+          integration: "zha"
+          manufacturer: "IKEA of Sweden"
+          model: "Remote Control N2"
           multiple: false
     button_up_short:
       name: Up button - short press

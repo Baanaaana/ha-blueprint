@@ -23,9 +23,9 @@ blueprint:
       description: IKEA SOMRIG remote to use
       selector:
         device:
-          integration: zha
-          manufacturer: IKEA of Sweden
-          model: SOMRIG shortcut button
+          integration: "zha"
+          manufacturer: "IKEA of Sweden"
+          model: "SOMRIG shortcut button"
           multiple: false
     single_dot_short:
       name: Single dot - short press

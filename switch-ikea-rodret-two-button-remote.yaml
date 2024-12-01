@@ -23,9 +23,9 @@ blueprint:
       description: IKEA RODRET remote to use
       selector:
         device:
-          integration: zha
-          manufacturer: IKEA of Sweden
-          model: RODRET Dimmer
+          integration: "zha"
+          manufacturer: "IKEA of Sweden"
+          model: "RODRET Dimmer"
           multiple: false
     top_short:
       name: Top button - short press
