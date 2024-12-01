@@ -90,35 +90,37 @@ action:
       endpoint_id: "{{ trigger.event.data.endpoint_id }}"
       args: "{{ trigger.event.data.args }}"
   - choose:
-      - conditions:
-          - "{{ command == 'short_release' }}"
+      # Top button
+      - conditions:  # Short press top
+          - "{{ command == 'on' }}"
+          - "{{ cluster_id == 6 }}"
           - "{{ endpoint_id == 1 }}"
         sequence: !input top_short
-      - conditions:
-          - "{{ command == 'multi_press_complete' }}"
+      - conditions:  # Long press top
+          - "{{ command == 'move_with_on_off' }}"
+          - "{{ cluster_id == 8 }}"
           - "{{ endpoint_id == 1 }}"
-        sequence: !input top_double
-      - conditions:
-          - "{{ command == 'long_press' }}"
-          - "{{ endpoint_id == 1 }}"
+          - "{{ args == [0, 83] }}"
         sequence: !input top_long
-      - conditions:
-          - "{{ command == 'long_release' }}"
+      - conditions:  # Release after long press top
+          - "{{ command == 'stop_with_on_off' }}"
+          - "{{ cluster_id == 8 }}"
           - "{{ endpoint_id == 1 }}"
         sequence: !input top_release
-      - conditions:
-          - "{{ command == 'short_release' }}"
-          - "{{ endpoint_id == 2 }}"
+      # Bottom button
+      - conditions:  # Short press bottom
+          - "{{ command == 'off' }}"
+          - "{{ cluster_id == 6 }}"
+          - "{{ endpoint_id == 1 }}"
         sequence: !input bottom_short
-      - conditions:
-          - "{{ command == 'multi_press_complete' }}"
-          - "{{ endpoint_id == 2 }}"
-        sequence: !input bottom_double
-      - conditions:
-          - "{{ command == 'long_press' }}"
-          - "{{ endpoint_id == 2 }}"
+      - conditions:  # Long press bottom
+          - "{{ command == 'move' }}"
+          - "{{ cluster_id == 8 }}"
+          - "{{ endpoint_id == 1 }}"
+          - "{{ args == [1, 83, 0, 0] }}"
         sequence: !input bottom_long
-      - conditions:
-          - "{{ command == 'long_release' }}"
-          - "{{ endpoint_id == 2 }}"
+      - conditions:  # Release after long press bottom
+          - "{{ command == 'stop' }}"
+          - "{{ cluster_id == 8 }}"
+          - "{{ endpoint_id == 1 }}"
         sequence: !input bottom_release 
