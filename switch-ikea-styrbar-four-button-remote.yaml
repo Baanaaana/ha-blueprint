@@ -1,7 +1,7 @@
 blueprint:
   name: Switch - IKEA STYRBAR - four button remote
   description: 'Control your home with an IKEA STYRBAR remote,
-    for use with [ZHA](https://www.home-assistant.io/integrations/zha/) or MQTT.
+    for use with [ZHA](https://www.home-assistant.io/integrations/zha/).
 
 
     Compatible with:
@@ -28,17 +28,9 @@ blueprint:
       description: IKEA STYRBAR remote to use
       selector:
         device:
-          integration:
-            - zha
-            - mqtt
-          manufacturer:
-            - IKEA of Sweden
-            - IKEA
-          model:
-            - Remote Control N2
-            - STYRBAR Remote control N2
-            - STYRBAR remote control (E2001)
-            - STYRBAR remote control (E2002)
+          integration: zha
+          manufacturer: IKEA of Sweden
+          model: Remote Control N2
           multiple: false
     button_up_short:
       name: Up button - short press

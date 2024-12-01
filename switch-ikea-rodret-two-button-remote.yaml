@@ -1,7 +1,7 @@
 blueprint:
   name: Switch - IKEA RODRET - two button remote
   description: 'Control your home with an IKEA RODRET dimmer,
-    for use with [ZHA](https://www.home-assistant.io/integrations/zha/) or MQTT.
+    for use with [ZHA](https://www.home-assistant.io/integrations/zha/).
 
 
     Compatible with:
@@ -23,15 +23,9 @@ blueprint:
       description: IKEA RODRET remote to use
       selector:
         device:
-          integration:
-            - zha
-            - mqtt
-          manufacturer:
-            - IKEA of Sweden
-            - IKEA
-          model:
-            - RODRET Dimmer
-            - RODRET wireless dimmer/power switch (E2201)
+          integration: zha
+          manufacturer: IKEA of Sweden
+          model: RODRET Dimmer
           multiple: false
     top_short:
       name: Top button - short press

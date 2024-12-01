@@ -1,7 +1,7 @@
 blueprint:
   name: Switch - IKEA SOMRIG - two button remote
   description: 'Control your home with an IKEA SOMRIG shortcut button,
-    for use with [ZHA](https://www.home-assistant.io/integrations/zha/) or MQTT.
+    for use with [ZHA](https://www.home-assistant.io/integrations/zha/).
 
 
     Compatible with:
@@ -23,15 +23,9 @@ blueprint:
       description: IKEA SOMRIG remote to use
       selector:
         device:
-          integration:
-            - zha
-            - mqtt
-          manufacturer:
-            - IKEA of Sweden
-            - IKEA
-          model:
-            - SOMRIG shortcut button
-            - SOMRIG shortcut button (E2213)
+          integration: zha
+          manufacturer: IKEA of Sweden
+          model: SOMRIG shortcut button
           multiple: false
     single_dot_short:
       name: Single dot - short press
