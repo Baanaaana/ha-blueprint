@@ -25,13 +25,11 @@ blueprint:
             - domain: switch
     party_lights:
       name: Party Lights
-      description: Select the lights that should show the color effects
+      description: Select RGB lights that should show the color effects (make sure to only select RGB capable lights)
       selector:
         target:
           entity:
             domain: light
-            supported_color_modes: 
-              - rgb
     off_lights:
       name: Lights to Turn Off
       description: Select lights that should turn off during party mode
