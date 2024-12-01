@@ -1,6 +1,6 @@
 blueprint:
-  name: ZHA - IKEA four button remote for lights
-  description: 'Control your home with an IKEA four button remote,
+  name: ZHA - IKEA STYRBAR four button remote
+  description: 'Control your home with an IKEA STYRBAR four button remote,
     for use with [ZHA](https://www.home-assistant.io/integrations/zha/).
 
 
@@ -34,44 +34,30 @@ blueprint:
           manufacturer: IKEA of Sweden
           model: Remote Control N2
           multiple: false
-    light:
-      name: Light(s)
-      description: The light(s) to control
+    button_up_short:
+      name: Up button - short press
+      description: Action to run on short up button press
+      default: []
       selector:
-        target:
-          entity:
-          - domain:
-            - light
-    force_brightness:
-      name: Force turn on brightness
-      description: Force the brightness to the set level below, when the "on" button
-        on the remote is pushed and lights turn on.
-      default: false
+        action: {}
+    button_up_long:
+      name: Up button - long press
+      description: Action to run on long up button press
+      default: []
       selector:
-        boolean: {}
-    brightness:
-      name: Brightness
-      description: Brightness of the light(s) when turning on
-      default: 50
+        action: {}
+    button_down_short:
+      name: Down button - short press
+      description: Action to run on short down button press
+      default: []
       selector:
-        number:
-          min: 0.0
-          max: 100.0
-          mode: slider
-          step: 1.0
-          unit_of_measurement: '%'
-    hold_time:
-      name: Hold Time
-      description: Time between the execution of the brighter/darker actions when
-        holding the brighter/darker button.
-      default: 0.5
+        action: {}
+    button_down_long:
+      name: Down button - long press
+      description: Action to run on long down button press
+      default: []
       selector:
-        number:
-          min: 0.1
-          max: 2.0
-          step: 0.1
-          unit_of_measurement: seconds
-          mode: slider
+        action: {}
     button_left_short:
       name: Left button - short press
       description: Action to run on short left button press
@@ -98,35 +84,9 @@ blueprint:
       default: []
       selector:
         action: {}
-    button_up_short:
-      name: Up button - short press
-      description: Action to run on short up button press
-      default: []
-      selector:
-        action: {}
-    button_up_long:
-      name: Up button - long press
-      description: Action to run on long up button press
-      default: []
-      selector:
-        action: {}
-    button_down_short:
-      name: Down button - short press
-      description: Action to run on short down button press
-      default: []
-      selector:
-        action: {}
-    button_down_long:
-      name: Down button - long press
-      description: Action to run on long down button press
-      default: []
-      selector:
-        action: {}
-  source_url: https://community.home-assistant.io/t/zha-ikea-four-button-remote-styrbar-for-lights-e2001-e2002/384482
+  source_url: https://github.com/Baanaaana/ha-blueprint/tree/main
 mode: restart
 max_exceeded: silent
-variables:
-  force_brightness: !input force_brightness
 trigger:
 - platform: event
   event_type: zha_event
