@@ -70,11 +70,9 @@ blueprint:
       description: Optional - Scene to activate when disco is turned off (leave empty to return to previous state)
       default: []
       selector:
-        target:
-          entity:
-            domain: scene
+        entity:
+          domain: scene
           multiple: false
-          optional: true
 
 variables:
   fixed_brightness: !input fixed_brightness
