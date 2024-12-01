@@ -2,7 +2,7 @@ blueprint:
   name: Light Party Mode
   description: 'Create a disco-like effect with your RGB lights.
     
-    Version: 0.1.1
+    Version: 0.1.2
     
     Features:
     - Select lights for color effects
@@ -101,6 +101,13 @@ blueprint:
           domain: scene
           multiple: true
 
+mode: restart
+max_exceeded: silent
+
+trigger:
+  - platform: state
+    entity_id: !input trigger_boolean
+
 variables:
   # Input variables
   transition_time: !input transition_time
@@ -119,21 +126,17 @@ variables:
     - [255, 128, 0]   # Orange
     - [255, 0, 128]   # Pink
 
-trigger:
-  - platform: state
-    entity_id: !input trigger_boolean
-
 action:
   # Store initial states
   - service: scene.create
     data:
       scene_id: before_party
-      snapshot_entities: !input party_lights
+      snapshot_entities: "{{ expand('!input party_lights').entity_id | join(',') }}"
 
   # Turn off selected lights
   - if:
       - condition: template
-        value_template: "{{ off_lights != None and off_lights != [] }}"
+        value_template: "{{ expand('!input off_lights').entity_id | length > 0 }}"
     then:
       - service: light.turn_off
         target: !input off_lights
@@ -170,7 +173,7 @@ action:
   # Return to scenes or previous state
   - if:
       - condition: template
-        value_template: "{{ return_scenes != None and return_scenes != [] }}"
+        value_template: "{{ return_scenes is not none and return_scenes|length > 0 }}"
     then:
       - repeat:
           count: "{{ return_scenes | length }}"
