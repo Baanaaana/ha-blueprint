@@ -72,7 +72,6 @@ blueprint:
       selector:
         entity:
           domain: scene
-          multiple: false
 
 variables:
   fixed_brightness: !input fixed_brightness
