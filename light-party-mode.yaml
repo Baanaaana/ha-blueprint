@@ -141,10 +141,11 @@ action:
           - choose:
               - conditions:
                   - condition: template
-                    value_template: "{{ not (return_scene == None or return_scene == []) }}"
+                    value_template: "{{ return_scene != None }}"
                 sequence:
                   - service: scene.turn_on
-                    target: !input return_scene
+                    target:
+                      entity_id: !input return_scene
             default:
               - service: light.turn_on
                 target: !input lights
