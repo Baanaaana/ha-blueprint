@@ -1,0 +1,185 @@
+blueprint:
+  name: ZHA - IKEA four button remote for lights
+  description: 'Control your home with an IKEA four button remote,
+    for use with [ZHA](https://www.home-assistant.io/integrations/zha/).
+
+
+    All four buttons (up, down, left, and right) can be configured with both short press
+    and long press actions. This allows you to assign any action including:
+    - Turning lights on/off
+    - Activating scenes
+    - Running scripts
+    - Calling services
+    - And more...
+
+
+    Each button can be configured independently:
+    - Up button: Short press and long press actions
+    - Down button: Short press and long press actions
+    - Left button: Short press and long press actions
+    - Right button: Short press and long press actions
+
+
+    Note: For the left and right buttons, before the long press event is sent, 
+    the "on" event gets triggered first.
+    '
+  domain: automation
+  input:
+    remote:
+      name: Remote
+      description: IKEA remote to use
+      selector:
+        device:
+          integration: zha
+          manufacturer: IKEA of Sweden
+          model: Remote Control N2
+          multiple: false
+    light:
+      name: Light(s)
+      description: The light(s) to control
+      selector:
+        target:
+          entity:
+          - domain:
+            - light
+    force_brightness:
+      name: Force turn on brightness
+      description: Force the brightness to the set level below, when the "on" button
+        on the remote is pushed and lights turn on.
+      default: false
+      selector:
+        boolean: {}
+    brightness:
+      name: Brightness
+      description: Brightness of the light(s) when turning on
+      default: 50
+      selector:
+        number:
+          min: 0.0
+          max: 100.0
+          mode: slider
+          step: 1.0
+          unit_of_measurement: '%'
+    hold_time:
+      name: Hold Time
+      description: Time between the execution of the brighter/darker actions when
+        holding the brighter/darker button.
+      default: 0.5
+      selector:
+        number:
+          min: 0.1
+          max: 2.0
+          step: 0.1
+          unit_of_measurement: seconds
+          mode: slider
+    button_left_short:
+      name: Left button - short press
+      description: Action to run on short left button press
+      default: []
+      selector:
+        action: {}
+    button_left_long:
+      name: Left button - long press
+      description: Action to run on long left button press. Use with care, as before
+        the long press event is sent, the "on" event gets triggered.
+      default: []
+      selector:
+        action: {}
+    button_right_short:
+      name: Right button - short press
+      description: Action to run on short right button press
+      default: []
+      selector:
+        action: {}
+    button_right_long:
+      name: Right button - long press
+      description: Action to run on long right button press. Use with care, as before
+        the long press event is sent, the "on" event gets triggered.
+      default: []
+      selector:
+        action: {}
+    button_up_short:
+      name: Up button - short press
+      description: Action to run on short up button press
+      default: []
+      selector:
+        action: {}
+    button_up_long:
+      name: Up button - long press
+      description: Action to run on long up button press
+      default: []
+      selector:
+        action: {}
+    button_down_short:
+      name: Down button - short press
+      description: Action to run on short down button press
+      default: []
+      selector:
+        action: {}
+    button_down_long:
+      name: Down button - long press
+      description: Action to run on long down button press
+      default: []
+      selector:
+        action: {}
+  source_url: https://community.home-assistant.io/t/zha-ikea-four-button-remote-styrbar-for-lights-e2001-e2002/384482
+mode: restart
+max_exceeded: silent
+variables:
+  force_brightness: !input force_brightness
+trigger:
+- platform: event
+  event_type: zha_event
+  event_data:
+    device_id: !input remote
+action:
+- variables:
+    command: '{{ trigger.event.data.command }}'
+    cluster_id: '{{ trigger.event.data.cluster_id }}'
+    endpoint_id: '{{ trigger.event.data.endpoint_id }}'
+    args: '{{ trigger.event.data.args }}'
+- choose:
+  - conditions:
+    - '{{ command == ''on'' }}'
+    - '{{ cluster_id == 6 }}'
+    - '{{ endpoint_id == 1 }}'
+    sequence: !input button_up_short
+  - conditions:
+    - '{{ command == ''move_with_on_off'' }}'
+    - '{{ cluster_id == 8 }}'
+    - '{{ endpoint_id == 1 }}'
+    sequence: !input button_up_long
+  - conditions:
+    - '{{ command == ''off'' }}'
+    - '{{ cluster_id == 6 }}'
+    - '{{ endpoint_id == 1 }}'
+    sequence: !input button_down_short
+  - conditions:
+    - '{{ command == ''move'' }}'
+    - '{{ cluster_id == 8 }}'
+    - '{{ endpoint_id == 1 }}'
+    sequence: !input button_down_long
+  - conditions:
+    - '{{ command == ''press'' }}'
+    - '{{ cluster_id == 5 }}'
+    - '{{ endpoint_id == 1 }}'
+    - '{{ args == [257, 13, 0] }}'
+    sequence: !input button_left_short
+  - conditions:
+    - '{{ command == ''hold'' }}'
+    - '{{ cluster_id == 5 }}'
+    - '{{ endpoint_id == 1 }}'
+    - '{{ args == [3329, 0] }}'
+    sequence: !input button_left_long
+  - conditions:
+    - '{{ command == ''press'' }}'
+    - '{{ cluster_id == 5 }}'
+    - '{{ endpoint_id == 1 }}'
+    - '{{ args == [256, 13, 0] }}'
+    sequence: !input button_right_short
+  - conditions:
+    - '{{ command == ''hold'' }}'
+    - '{{ cluster_id == 5 }}'
+    - '{{ endpoint_id == 1 }}'
+    - '{{ args == [3328, 0] }}'
+    sequence: !input button_right_long
