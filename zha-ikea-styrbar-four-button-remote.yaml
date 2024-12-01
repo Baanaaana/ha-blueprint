@@ -1,6 +1,6 @@
 blueprint:
-  name: ZHA - IKEA STYRBAR four button remote
-  description: 'Control your home with an IKEA STYRBAR four button remote,
+  name: Switch - IKEA STYRBAR - four button remote
+  description: 'Control your home with the IKEA STYRBAR four button remote,
     for use with [ZHA](https://www.home-assistant.io/integrations/zha/).
 
 
