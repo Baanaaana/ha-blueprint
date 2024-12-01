@@ -23,6 +23,7 @@ This blueprint allows you to control your home with an IKEA STYRBAR remote (mode
 
 #### Installation
 1. Add this blueprint repository to Home Assistant:
+
    [![Open your Home Assistant instance and show the blueprint import dialog with this blueprint pre-filled](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https://github.com/Baanaaana/ha-blueprint/blob/main/switch-ikea-styrbar-four-button-remote.yaml)
 
 2. Create a new automation using the blueprint
