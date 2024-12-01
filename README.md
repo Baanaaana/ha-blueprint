@@ -2,6 +2,11 @@
 
 A collection of blueprints for Home Assistant automations for IKEA remotes.
 
+## Quick Links
+- [IKEA STYRBAR - four button remote](#switch---ikea-styrbar---four-button-remote)
+- [IKEA SOMRIG - two button remote](#switch---ikea-somrig---two-button-remote)
+- [IKEA RODRET - two button remote](#switch---ikea-rodret---two-button-remote)
+
 ## Blueprints
 
 ### Switch - IKEA STYRBAR - four button remote
