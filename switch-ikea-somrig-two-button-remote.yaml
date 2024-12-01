@@ -1,0 +1,119 @@
+blueprint:
+  name: Switch - IKEA SOMRIG - two button remote
+  description: 'Control your home with an IKEA SOMRIG remote,
+    for use with [ZHA](https://www.home-assistant.io/integrations/zha/).
+
+
+    All two buttons (single dot and double dot) can be configured with short press,
+    double press, long press and release after long press actions.
+
+
+    Each button can be configured independently:
+    - Single dot button: Short press, double press, long press and release
+    - Double dot button: Short press, double press, long press and release'
+  domain: automation
+  input:
+    remote:
+      name: Remote
+      description: IKEA SOMRIG remote to use
+      selector:
+        device:
+          integration: zha
+          manufacturer: IKEA of Sweden
+          model: SOMRIG shortcut button
+          multiple: false
+    single_dot_short:
+      name: Single dot - short press
+      description: Action to run on short press of single dot button
+      default: []
+      selector:
+        action: {}
+    single_dot_double:
+      name: Single dot - double press
+      description: Action to run on double press of single dot button
+      default: []
+      selector:
+        action: {}
+    single_dot_long:
+      name: Single dot - long press
+      description: Action to run on long press of single dot button
+      default: []
+      selector:
+        action: {}
+    single_dot_release:
+      name: Single dot - release after long press
+      description: Action to run when releasing after long press of single dot button
+      default: []
+      selector:
+        action: {}
+    double_dot_short:
+      name: Double dot - short press
+      description: Action to run on short press of double dot button
+      default: []
+      selector:
+        action: {}
+    double_dot_double:
+      name: Double dot - double press
+      description: Action to run on double press of double dot button
+      default: []
+      selector:
+        action: {}
+    double_dot_long:
+      name: Double dot - long press
+      description: Action to run on long press of double dot button
+      default: []
+      selector:
+        action: {}
+    double_dot_release:
+      name: Double dot - release after long press
+      description: Action to run when releasing after long press of double dot button
+      default: []
+      selector:
+        action: {}
+  source_url: https://github.com/Baanaaana/ha-blueprint/tree/main
+mode: restart
+max_exceeded: silent
+trigger:
+  - platform: event
+    event_type: zha_event
+    event_data:
+      device_id: !input remote
+action:
+  - variables:
+      command: "{{ trigger.event.data.command }}"
+      cluster_id: "{{ trigger.event.data.cluster_id }}"
+      endpoint_id: "{{ trigger.event.data.endpoint_id }}"
+      args: "{{ trigger.event.data.args }}"
+  - choose:
+      - conditions:
+          - "{{ command == 'short_release' }}"
+          - "{{ endpoint_id == 1 }}"
+        sequence: !input single_dot_short
+      - conditions:
+          - "{{ command == 'multi_press_complete' }}"
+          - "{{ endpoint_id == 1 }}"
+        sequence: !input single_dot_double
+      - conditions:
+          - "{{ command == 'long_press' }}"
+          - "{{ endpoint_id == 1 }}"
+        sequence: !input single_dot_long
+      - conditions:
+          - "{{ command == 'long_release' }}"
+          - "{{ endpoint_id == 1 }}"
+        sequence: !input single_dot_release
+      - conditions:
+          - "{{ command == 'short_release' }}"
+          - "{{ endpoint_id == 2 }}"
+        sequence: !input double_dot_short
+      - conditions:
+          - "{{ command == 'multi_press_complete' }}"
+          - "{{ endpoint_id == 2 }}"
+        sequence: !input double_dot_double
+      - conditions:
+          - "{{ command == 'long_press' }}"
+          - "{{ endpoint_id == 2 }}"
+        sequence: !input double_dot_long
+      - conditions:
+          - "{{ command == 'long_release' }}"
+          - "{{ endpoint_id == 2 }}"
+        sequence: !input double_dot_release

@@ -35,6 +35,34 @@ This blueprint allows you to control your home with an IKEA STYRBAR remote (mode
 - Requires the ZHA (Zigbee Home Automation) integration
 - Compatible with IKEA STYRBAR remote model E2001/E2002 (Remote Control N2)
 
+### Switch - IKEA SOMRIG - two button remote
+
+This blueprint allows you to control your home with an IKEA SOMRIG remote using the ZHA integration. Each button (single dot and double dot) can be configured with short press, double press, long press, and release after long press actions.
+
+#### Features
+- Configure actions for all 8 possible button combinations:
+  - Single dot button: Short press, double press, long press, and release
+  - Double dot button: Short press, double press, long press, and release
+- Assign any type of action to each button press:
+  - Turn lights on/off
+  - Activate scenes
+  - Run scripts
+  - Call services
+  - And more...
+
+#### Installation
+1. Add this blueprint repository to Home Assistant:
+
+   [![Open your Home Assistant instance and show the blueprint import dialog with this blueprint pre-filled](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https://github.com/Baanaaana/ha-blueprint/blob/main/switch-ikea-somrig-two-button-remote.yaml)
+
+2. Create a new automation using the blueprint
+3. Select your IKEA SOMRIG remote
+4. Configure the desired actions for each button press
+
+#### Notes
+- Requires the ZHA (Zigbee Home Automation) integration
+- Compatible with IKEA SOMRIG shortcut button
+
 ## Support
 
 If you find any issues or have suggestions for improvements, please open an issue on GitHub.
