@@ -116,8 +116,8 @@ variables:
   max_brightness: !input max_brightness
   fixed_brightness: !input fixed_brightness
   # Get entity IDs for lights
-  party_light_entities: "{{ expand(!input party_lights).entity_id | list }}"
-  off_light_entities: "{{ expand(!input off_lights).entity_id | list }}"
+  party_light_entities: "{{ expand('!input party_lights') }}"
+  off_light_entities: "{{ expand('!input off_lights') }}"
   # Bright saturated colors
   party_colors:
     - [255, 0, 0]     # Red
