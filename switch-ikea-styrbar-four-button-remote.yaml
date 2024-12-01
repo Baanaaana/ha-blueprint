@@ -1,85 +1,91 @@
 blueprint:
   name: Switch - IKEA STYRBAR - four button remote
-  description: 'Control your home with the IKEA STYRBAR four button remote,
-    for use with [ZHA](https://www.home-assistant.io/integrations/zha/).
+  description: 'Control your home with an IKEA STYRBAR remote,
+    for use with [ZHA](https://www.home-assistant.io/integrations/zha/) or MQTT.
 
 
-    All four buttons (up, down, left, and right) can be configured with both short press
-    and long press actions. This allows you to assign any action including:
-    - Turning lights on/off
-    - Activating scenes
-    - Running scripts
-    - Calling services
-    - And more...
+    Compatible with:
+    - IKEA STYRBAR remote (E2001/E2002)
+    - IKEA STYRBAR Remote control N2
+
+
+    All four buttons can be configured with both short press and long press actions.
 
 
     Each button can be configured independently:
-    - Up button: Short press and long press actions
-    - Down button: Short press and long press actions
-    - Left button: Short press and long press actions
-    - Right button: Short press and long press actions
+    - Up button: Short press and long press
+    - Down button: Short press and long press
+    - Left button: Short press and long press
+    - Right button: Short press and long press
 
 
     Note: For the left and right buttons, before the long press event is sent, 
-    the "on" event gets triggered first.
-    '
+    the "on" event gets triggered first.'
   domain: automation
   input:
     remote:
       name: Remote
-      description: IKEA remote to use
+      description: IKEA STYRBAR remote to use
       selector:
         device:
-          integration: zha
-          manufacturer: IKEA of Sweden
-          model: Remote Control N2
+          integration:
+            - zha
+            - mqtt
+          manufacturer:
+            - IKEA of Sweden
+            - IKEA
+          model:
+            - Remote Control N2
+            - STYRBAR Remote control N2
+            - STYRBAR remote control (E2001)
+            - STYRBAR remote control (E2002)
           multiple: false
     button_up_short:
       name: Up button - short press
-      description: Action to run on short up button press
+      description: Action to run on short press of up button
       default: []
       selector:
         action: {}
     button_up_long:
       name: Up button - long press
-      description: Action to run on long up button press
+      description: Action to run on long press of up button
       default: []
       selector:
         action: {}
     button_down_short:
       name: Down button - short press
-      description: Action to run on short down button press
+      description: Action to run on short press of down button
       default: []
       selector:
         action: {}
     button_down_long:
       name: Down button - long press
-      description: Action to run on long down button press
+      description: Action to run on long press of down button
       default: []
       selector:
         action: {}
     button_left_short:
       name: Left button - short press
-      description: Action to run on short left button press
+      description: Action to run on short press of left button
       default: []
       selector:
         action: {}
     button_left_long:
       name: Left button - long press
-      description: Action to run on long left button press. Use with care, as before
+      description: Action to run on long press of left button. Use with care, as before
         the long press event is sent, the "on" event gets triggered.
       default: []
       selector:
         action: {}
     button_right_short:
       name: Right button - short press
-      description: Action to run on short right button press
+      description: Action to run on short press of right button
       default: []
       selector:
         action: {}
     button_right_long:
       name: Right button - long press
-      description: Action to run on long right button press. Use with care, as before
+      description: Action to run on long press of right button. Use with care, as before
         the long press event is sent, the "on" event gets triggered.
       default: []
       selector:
@@ -88,58 +94,58 @@ blueprint:
 mode: restart
 max_exceeded: silent
 trigger:
-- platform: event
-  event_type: zha_event
-  event_data:
-    device_id: !input remote
+  - platform: event
+    event_type: zha_event
+    event_data:
+      device_id: !input remote
 action:
-- variables:
-    command: '{{ trigger.event.data.command }}'
-    cluster_id: '{{ trigger.event.data.cluster_id }}'
-    endpoint_id: '{{ trigger.event.data.endpoint_id }}'
-    args: '{{ trigger.event.data.args }}'
-- choose:
-  - conditions:
-    - '{{ command == ''on'' }}'
-    - '{{ cluster_id == 6 }}'
-    - '{{ endpoint_id == 1 }}'
-    sequence: !input button_up_short
-  - conditions:
-    - '{{ command == ''move_with_on_off'' }}'
-    - '{{ cluster_id == 8 }}'
-    - '{{ endpoint_id == 1 }}'
-    sequence: !input button_up_long
-  - conditions:
-    - '{{ command == ''off'' }}'
-    - '{{ cluster_id == 6 }}'
-    - '{{ endpoint_id == 1 }}'
-    sequence: !input button_down_short
-  - conditions:
-    - '{{ command == ''move'' }}'
-    - '{{ cluster_id == 8 }}'
-    - '{{ endpoint_id == 1 }}'
-    sequence: !input button_down_long
-  - conditions:
-    - '{{ command == ''press'' }}'
-    - '{{ cluster_id == 5 }}'
-    - '{{ endpoint_id == 1 }}'
-    - '{{ args == [257, 13, 0] }}'
-    sequence: !input button_left_short
-  - conditions:
-    - '{{ command == ''hold'' }}'
-    - '{{ cluster_id == 5 }}'
-    - '{{ endpoint_id == 1 }}'
-    - '{{ args == [3329, 0] }}'
-    sequence: !input button_left_long
-  - conditions:
-    - '{{ command == ''press'' }}'
-    - '{{ cluster_id == 5 }}'
-    - '{{ endpoint_id == 1 }}'
-    - '{{ args == [256, 13, 0] }}'
-    sequence: !input button_right_short
-  - conditions:
-    - '{{ command == ''hold'' }}'
-    - '{{ cluster_id == 5 }}'
-    - '{{ endpoint_id == 1 }}'
-    - '{{ args == [3328, 0] }}'
-    sequence: !input button_right_long
+  - variables:
+      command: "{{ trigger.event.data.command }}"
+      cluster_id: "{{ trigger.event.data.cluster_id }}"
+      endpoint_id: "{{ trigger.event.data.endpoint_id }}"
+      args: "{{ trigger.event.data.args }}"
+  - choose:
+      - conditions:
+          - "{{ command == 'on' }}"
+          - "{{ cluster_id == 6 }}"
+          - "{{ endpoint_id == 1 }}"
+        sequence: !input button_up_short
+      - conditions:
+          - "{{ command == 'move_with_on_off' }}"
+          - "{{ cluster_id == 8 }}"
+          - "{{ endpoint_id == 1 }}"
+        sequence: !input button_up_long
+      - conditions:
+          - "{{ command == 'off' }}"
+          - "{{ cluster_id == 6 }}"
+          - "{{ endpoint_id == 1 }}"
+        sequence: !input button_down_short
+      - conditions:
+          - "{{ command == 'move' }}"
+          - "{{ cluster_id == 8 }}"
+          - "{{ endpoint_id == 1 }}"
+        sequence: !input button_down_long
+      - conditions:
+          - "{{ command == 'press' }}"
+          - "{{ cluster_id == 5 }}"
+          - "{{ endpoint_id == 1 }}"
+          - "{{ args == [257, 13, 0] }}"
+        sequence: !input button_left_short
+      - conditions:
+          - "{{ command == 'hold' }}"
+          - "{{ cluster_id == 5 }}"
+          - "{{ endpoint_id == 1 }}"
+          - "{{ args == [3329, 0] }}"
+        sequence: !input button_left_long
+      - conditions:
+          - "{{ command == 'press' }}"
+          - "{{ cluster_id == 5 }}"
+          - "{{ endpoint_id == 1 }}"
+          - "{{ args == [256, 13, 0] }}"
+        sequence: !input button_right_short
+      - conditions:
+          - "{{ command == 'hold' }}"
+          - "{{ cluster_id == 5 }}"
+          - "{{ endpoint_id == 1 }}"
+          - "{{ args == [3328, 0] }}"
+        sequence: !input button_right_long

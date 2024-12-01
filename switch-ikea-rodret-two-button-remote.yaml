@@ -1,26 +1,26 @@
 blueprint:
-  name: Switch - IKEA SOMRIG - two button remote
-  description: 'Control your home with an IKEA SOMRIG shortcut button,
+  name: Switch - IKEA RODRET - two button remote
+  description: 'Control your home with an IKEA RODRET dimmer,
     for use with [ZHA](https://www.home-assistant.io/integrations/zha/) or MQTT.
 
 
     Compatible with:
-    - IKEA SOMRIG shortcut button
-    - IKEA SOMRIG shortcut button (E2213)
+    - IKEA RODRET Dimmer
+    - IKEA RODRET wireless dimmer/power switch (E2201)
 
 
-    Both buttons (single dot and double dot) can be configured with short press,
+    Both buttons can be configured with short press,
     double press, long press and release after long press actions.
 
 
     Each button can be configured independently:
-    - Single dot button: Short press, double press, long press and release
-    - Double dot button: Short press, double press, long press and release'
+    - Top button: Short press, double press, long press and release
+    - Bottom button: Short press, double press, long press and release'
   domain: automation
   input:
     remote:
       name: Remote
-      description: IKEA SOMRIG remote to use
+      description: IKEA RODRET remote to use
       selector:
         device:
           integration:
@@ -30,54 +30,54 @@ blueprint:
             - IKEA of Sweden
             - IKEA
           model:
-            - SOMRIG shortcut button
-            - SOMRIG shortcut button (E2213)
+            - RODRET Dimmer
+            - RODRET wireless dimmer/power switch (E2201)
           multiple: false
-    single_dot_short:
-      name: Single dot - short press
-      description: Action to run on short press of single dot button
+    top_short:
+      name: Top button - short press
+      description: Action to run on short press of top button
       default: []
       selector:
         action: {}
-    single_dot_double:
-      name: Single dot - double press
-      description: Action to run on double press of single dot button
+    top_double:
+      name: Top button - double press
+      description: Action to run on double press of top button
       default: []
       selector:
         action: {}
-    single_dot_long:
-      name: Single dot - long press
-      description: Action to run on long press of single dot button
+    top_long:
+      name: Top button - long press
+      description: Action to run on long press of top button
       default: []
       selector:
         action: {}
-    single_dot_release:
-      name: Single dot - release after long press
-      description: Action to run when releasing after long press of single dot button
+    top_release:
+      name: Top button - release after long press
+      description: Action to run when releasing after long press of top button
       default: []
       selector:
         action: {}
-    double_dot_short:
-      name: Double dot - short press
-      description: Action to run on short press of double dot button
+    bottom_short:
+      name: Bottom button - short press
+      description: Action to run on short press of bottom button
       default: []
       selector:
         action: {}
-    double_dot_double:
-      name: Double dot - double press
-      description: Action to run on double press of double dot button
+    bottom_double:
+      name: Bottom button - double press
+      description: Action to run on double press of bottom button
       default: []
       selector:
         action: {}
-    double_dot_long:
-      name: Double dot - long press
-      description: Action to run on long press of double dot button
+    bottom_long:
+      name: Bottom button - long press
+      description: Action to run on long press of bottom button
       default: []
       selector:
         action: {}
-    double_dot_release:
-      name: Double dot - release after long press
-      description: Action to run when releasing after long press of double dot button
+    bottom_release:
+      name: Bottom button - release after long press
+      description: Action to run when releasing after long press of bottom button
       default: []
       selector:
         action: {}
@@ -99,32 +99,32 @@ action:
       - conditions:
           - "{{ command == 'short_release' }}"
           - "{{ endpoint_id == 1 }}"
-        sequence: !input single_dot_short
+        sequence: !input top_short
       - conditions:
           - "{{ command == 'multi_press_complete' }}"
           - "{{ endpoint_id == 1 }}"
-        sequence: !input single_dot_double
+        sequence: !input top_double
       - conditions:
           - "{{ command == 'long_press' }}"
           - "{{ endpoint_id == 1 }}"
-        sequence: !input single_dot_long
+        sequence: !input top_long
       - conditions:
           - "{{ command == 'long_release' }}"
           - "{{ endpoint_id == 1 }}"
-        sequence: !input single_dot_release
+        sequence: !input top_release
       - conditions:
           - "{{ command == 'short_release' }}"
           - "{{ endpoint_id == 2 }}"
-        sequence: !input double_dot_short
+        sequence: !input bottom_short
       - conditions:
           - "{{ command == 'multi_press_complete' }}"
           - "{{ endpoint_id == 2 }}"
-        sequence: !input double_dot_double
+        sequence: !input bottom_double
       - conditions:
           - "{{ command == 'long_press' }}"
           - "{{ endpoint_id == 2 }}"
-        sequence: !input double_dot_long
+        sequence: !input bottom_long
       - conditions:
           - "{{ command == 'long_release' }}"
           - "{{ endpoint_id == 2 }}"
-        sequence: !input double_dot_release
+        sequence: !input bottom_release 
