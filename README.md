@@ -8,9 +8,6 @@ A collection of blueprints for Home Assistant automations.
 - [IKEA SOMRIG - two button remote](#switch---ikea-somrig---two-button-remote)
 - [IKEA RODRET - two button remote](#switch---ikea-rodret---two-button-remote)
 
-### Light Effects
-- [Light Party Mode](#light-party-mode)
-
 ## Remote Control Blueprints
 
 ### Switch - IKEA STYRBAR - four button remote
@@ -102,42 +99,6 @@ This blueprint allows you to control your home with an IKEA RODRET remote using 
 - Compatible with:
   - IKEA RODRET Dimmer
   - IKEA RODRET wireless dimmer/power switch (E2201)
-
-## Light Effect Blueprints
-
-### Light Party Mode
-
-This blueprint creates a party effect with your lights by cycling through bright saturated colors.
-
-#### Features
-- Configure actions for all lighting aspects:
-  - Select which lights to control
-  - Set color transition timing (1-300 seconds)
-  - Adjust brightness levels (min/max)
-  - Option for fixed or variable brightness
-- Return options when turned off:
-  - Return to previous state
-  - Activate a specific scene
-- Control via input_boolean switch
-
-#### Installation
-1. Add this blueprint repository to Home Assistant:
-
-   [![Open your Home Assistant instance and show the blueprint import dialog with this blueprint pre-filled](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https://github.com/Baanaaana/ha-blueprint/blob/main/light-party-mode.yaml)
-
-2. Create a new automation using the blueprint
-3. Select your lights
-4. Configure the settings:
-   - Choose an input_boolean entity to control the effect
-   - Set your preferred transition time
-   - Configure brightness settings
-   - Optionally select a return scene
-
-#### Notes
-- Lights must support RGB color and transitions
-- Uses bright, saturated colors (red, magenta, blue, cyan, green, yellow)
-- Smooth transitions between colors
-- Can return to previous state or activate a scene when turned off
 
 ## Support
 
