@@ -2,7 +2,7 @@ blueprint:
   name: Light Party Mode
   description: 'Create a party effect with your lights by cycling through bright saturated colors.
     
-    Version: 0.0.4
+    Version: 0.0.5
     
     Features:
     - Select which lights to control
@@ -93,9 +93,6 @@ variables:
     - [0, 255, 0]     # Green
     - [255, 255, 0]   # Yellow
 
-mode: restart
-max_exceeded: silent
-
 trigger:
   - platform: state
     entity_id: !input trigger_boolean
@@ -109,26 +106,25 @@ action:
       snapshot_entities: "{{ target_lights }}"
 
   # Main party sequence
-  - repeat:
-      sequence:
-        - service: light.turn_on
-          target:
-            entity_id: "{{ target_lights }}"
-          data:
-            rgb_color: "{{ disco_colors[repeat.index-1] }}"
-            brightness_pct: >
-              {% if fixed_brightness > 0 %}
-                {{ fixed_brightness }}
-              {% else %}
-                {{ range(min_brightness|int, max_brightness|int)|random }}
-              {% endif %}
-            transition: "{{ transition_time|int / 2 }}"
-        - delay:
-            seconds: "{{ transition_time }}"
-      until:
-        - condition: state
-          entity_id: !input trigger_boolean
-          state: "off"
+  - while:
+      - condition: state
+        entity_id: !input trigger_boolean
+        state: "on"
+    sequence:
+      - service: light.turn_on
+        target:
+          entity_id: "{{ target_lights }}"
+        data:
+          rgb_color: "{{ disco_colors[range(0, disco_colors | length - 1) | random] }}"
+          brightness_pct: >
+            {% if fixed_brightness > 0 %}
+              {{ fixed_brightness }}
+            {% else %}
+              {{ range(min_brightness|int, max_brightness|int)|random }}
+            {% endif %}
+          transition: "{{ transition_time|int / 2 }}"
+      - delay:
+          seconds: "{{ transition_time }}"
 
   # Return to previous state or scene
   - choose:
