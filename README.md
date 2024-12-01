@@ -72,12 +72,12 @@ This blueprint allows you to control your home with an IKEA SOMRIG remote using 
 
 ### Switch - IKEA RODRET - two button remote
 
-This blueprint allows you to control your home with an IKEA RODRET remote using ZHA integration. Each button (top and bottom) can be configured with short press, double press, long press, and release after long press actions.
+This blueprint allows you to control your home with an IKEA RODRET remote using ZHA integration. Each button (top and bottom) can be configured with short press, long press, and release after long press actions.
 
 #### Features
-- Configure actions for all 8 possible button combinations:
-  - Top button: Short press, double press, long press, and release
-  - Bottom button: Short press, double press, long press, and release
+- Configure actions for all 6 possible button combinations:
+  - Top button: Short press, long press, and release after long press
+  - Bottom button: Short press, long press, and release after long press
 - Assign any type of action to each button press:
   - Turn lights on/off
   - Activate scenes
