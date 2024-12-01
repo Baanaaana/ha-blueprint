@@ -59,18 +59,24 @@ blueprint:
           mode: slider
           step: 1
     fixed_brightness:
-      name: Use Fixed Brightness
-      description: If enabled, lights will stay at maximum brightness
-      default: false
+      name: Fixed Brightness
+      description: Set a fixed brightness level (0 to disable fixed brightness)
+      default: 0
       selector:
-        boolean: {}
+        number:
+          min: 0
+          max: 100
+          unit_of_measurement: '%'
+          mode: slider
+          step: 1
     return_scene:
-      name: Return Scene
-      description: Optional - Scene to activate when party mode is turned off (leave empty to return to previous state)
+      name: Return Scene(s)
+      description: Optional - Scene(s) to activate when party mode is turned off (leave empty to return to previous state)
       default: null
       selector:
         entity:
           domain: scene
+          multiple: true
 
 variables:
   fixed_brightness: !input fixed_brightness
@@ -93,11 +99,10 @@ trigger:
 
 action:
   # Store initial state
-  - scene: create
-    metadata: {}
+  - service: scene.create
     data:
       scene_id: before_party
-      snapshot_entities: "{{ lights }}"
+      snapshot_entities: !input lights
 
   # Main party sequence
   - choose:
@@ -121,8 +126,8 @@ action:
                         data:
                           rgb_color: "{{ disco_colors[repeat.index-1] }}"
                           brightness_pct: >
-                            {% if fixed_brightness %}
-                              {{ max_brightness }}
+                            {% if fixed_brightness > 0 %}
+                              {{ fixed_brightness }}
                             {% else %}
                               {{ range(min_brightness|int, max_brightness|int)|random }}
                             {% endif %}
@@ -140,9 +145,14 @@ action:
                   - condition: template
                     value_template: "{{ return_scene != None }}"
                 sequence:
-                  - service: scene.turn_on
-                    target:
-                      entity_id: "{{ return_scene }}"
+                  - repeat:
+                      count: "{{ return_scene | length }}"
+                      sequence:
+                        - service: scene.turn_on
+                          target:
+                            entity_id: "{{ return_scene[repeat.index - 1] }}"
+                          data:
+                            transition: 2
             default:
               - service: scene.turn_on
                 target:
