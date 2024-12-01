@@ -2,7 +2,7 @@ blueprint:
   name: Light Party Mode
   description: 'Create a disco-like effect with your RGB lights.
     
-    Version: 0.1.3
+    Version: 0.1.4
     
     Features:
     - Select lights for color effects
