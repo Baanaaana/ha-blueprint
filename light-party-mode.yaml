@@ -298,25 +298,21 @@ action:
                       {% if color_mode == "random" %}
                         {{ range(0,255) | random, range(0,255) | random, range(0,255) | random }}
                       {% elif color_mode == "deep" %}
-                        {% set saturation = 1.0 %}  # Full saturation
-                        {% set lightness = 0.5 %}   # Mid lightness for vibrant colors
                         {% set hue = range(0, 360) | random %}  # Random hue between 0-360
                         
                         {% if hue < 60 %}
-                          {% set r, g, b = 255, (hue * 4.25) | round(0), 0 %}  # Red to Yellow
+                          [255, {{ (hue * 4.25) | round(0) }}, 0]  # Red to Yellow
                         {% elif hue < 120 %}
-                          {% set r, g, b = (255 - ((hue - 60) * 4.25)) | round(0), 255, 0 %}  # Yellow to Green
+                          [{{ (255 - ((hue - 60) * 4.25)) | round(0) }}, 255, 0]  # Yellow to Green
                         {% elif hue < 180 %}
-                          {% set r, g, b = 0, 255, ((hue - 120) * 4.25) | round(0) %}  # Green to Cyan
+                          [0, 255, {{ ((hue - 120) * 4.25) | round(0) }}]  # Green to Cyan
                         {% elif hue < 240 %}
-                          {% set r, g, b = 0, (255 - ((hue - 180) * 4.25)) | round(0), 255 %}  # Cyan to Blue
+                          [0, {{ (255 - ((hue - 180) * 4.25)) | round(0) }}, 255]  # Cyan to Blue
                         {% elif hue < 300 %}
-                          {% set r, g, b = ((hue - 240) * 4.25) | round(0), 0, 255 %}  # Blue to Magenta
+                          [{{ ((hue - 240) * 4.25) | round(0) }}, 0, 255]  # Blue to Magenta
                         {% else %}
-                          {% set r, g, b = 255, 0, (255 - ((hue - 300) * 4.25)) | round(0) %}  # Magenta to Red
+                          [255, 0, {{ (255 - ((hue - 300) * 4.25)) | round(0) }}]  # Magenta to Red
                         {% endif %}
-                        
-                        [{{ r }}, {{ g }}, {{ b }}]
                       {% elif color_mode == "christmas" %}  
                         {% macro random_rgb_component(max) %}
                           {{ range(0, 256) | random }}
@@ -386,25 +382,21 @@ action:
                             {% if color_mode == "random" %}
                               {{ range(0,255) | random, range(0,255) | random, range(0,255) | random }}
                             {% elif color_mode == "deep" %}
-                              {% set saturation = 1.0 %}  # Full saturation
-                              {% set lightness = 0.5 %}   # Mid lightness for vibrant colors
                               {% set hue = range(0, 360) | random %}  # Random hue between 0-360
                               
                               {% if hue < 60 %}
-                                {% set r, g, b = 255, (hue * 4.25) | round(0), 0 %}  # Red to Yellow
+                                [255, {{ (hue * 4.25) | round(0) }}, 0]  # Red to Yellow
                               {% elif hue < 120 %}
-                                {% set r, g, b = (255 - ((hue - 60) * 4.25)) | round(0), 255, 0 %}  # Yellow to Green
+                                [{{ (255 - ((hue - 60) * 4.25)) | round(0) }}, 255, 0]  # Yellow to Green
                               {% elif hue < 180 %}
-                                {% set r, g, b = 0, 255, ((hue - 120) * 4.25) | round(0) %}  # Green to Cyan
+                                [0, 255, {{ ((hue - 120) * 4.25) | round(0) }}]  # Green to Cyan
                               {% elif hue < 240 %}
-                                {% set r, g, b = 0, (255 - ((hue - 180) * 4.25)) | round(0), 255 %}  # Cyan to Blue
+                                [0, {{ (255 - ((hue - 180) * 4.25)) | round(0) }}, 255]  # Cyan to Blue
                               {% elif hue < 300 %}
-                                {% set r, g, b = ((hue - 240) * 4.25) | round(0), 0, 255 %}  # Blue to Magenta
+                                [{{ ((hue - 240) * 4.25) | round(0) }}, 0, 255]  # Blue to Magenta
                               {% else %}
-                                {% set r, g, b = 255, 0, (255 - ((hue - 300) * 4.25)) | round(0) %}  # Magenta to Red
+                                [255, 0, {{ (255 - ((hue - 300) * 4.25)) | round(0) }}]  # Magenta to Red
                               {% endif %}
-                              
-                              [{{ r }}, {{ g }}, {{ b }}]
                             {% elif color_mode == "christmas" %}  
                               {% macro random_rgb_component(max) %}
                                 {{ range(0, max) | random }}
