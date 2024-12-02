@@ -10,7 +10,7 @@ A collection of blueprints for Home Assistant.
   - Compatible with IKEA RODRET dimmer/power switch (E2201)
   - Supports short press, double press, long press and release after long press for both buttons
   
-  ![IKEA RODRET Remote](./images/ikea-rodret.png)
+  ![IKEA RODRET Remote](./images/ikea-rodret.jpg)
   
   [![Open your Home Assistant instance and show the blueprint import dialog with this blueprint pre-filled](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https://github.com/Baanaaana/ha-blueprint/blob/main/switch-ikea-rodret-two-button-remote.yaml)
 
@@ -18,7 +18,7 @@ A collection of blueprints for Home Assistant.
   - Compatible with IKEA SOMRIG shortcut button (E2213)
   - Supports short press, double press, long press and release after long press for both buttons
   
-  ![IKEA SOMRIG Remote](./images/ikea-somrig.png)
+  ![IKEA SOMRIG Remote](./images/ikea-somrig.jpg)
   
   [![Open your Home Assistant instance and show the blueprint import dialog with this blueprint pre-filled](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https://github.com/Baanaaana/ha-blueprint/blob/main/switch-ikea-somrig-two-button-remote.yaml)
 
@@ -26,7 +26,7 @@ A collection of blueprints for Home Assistant.
   - Compatible with IKEA STYRBAR remote (E2001/E2002)
   - Supports short press and long press for all four buttons
   
-  ![IKEA STYRBAR Remote](./images/ikea-styrbar.png)
+  ![IKEA STYRBAR Remote](./images/ikea-styrbar.jpg)
   
   [![Open your Home Assistant instance and show the blueprint import dialog with this blueprint pre-filled](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https://github.com/Baanaaana/ha-blueprint/blob/main/switch-ikea-styrbar-four-button-remote.yaml)
 
@@ -34,7 +34,7 @@ A collection of blueprints for Home Assistant.
   - Compatible with IKEA TRADFRI ON/OFF switch (E1743)
   - Supports short press and long press for both ON and OFF buttons
   
-  ![IKEA TRADFRI ON/OFF Switch](./images/ikea-tradfri-onoff.png)
+  ![IKEA TRADFRI ON/OFF Switch](./images/ikea-tradfri-onoff.jpg)
   
   [![Open your Home Assistant instance and show the blueprint import dialog with this blueprint pre-filled](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https://github.com/Baanaaana/ha-blueprint/blob/main/switch-ikea-tradfri-on-off-switch.yaml)
 
