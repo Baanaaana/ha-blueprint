@@ -2,7 +2,7 @@ blueprint:
   name: Party Lights
   author: AntonH
   description: |
-    **Version 3.0**
+    **Version 3.0.1**
     Lights go to party mode (color loops or fade-in-and-out)
     ⚠️ **NOTE:** ⚠️
     *This automation is triggered by the status of a switch or an input_boolean entity.*
@@ -299,19 +299,17 @@ action:
                         {{ range(0,255) | random, range(0,255) | random, range(0,255) | random }}
                       {% elif color_mode == "deep" %}
                         {% set current_hs = state_attr(target_lights | first, 'hs_color') | default([0, 0]) %}
-                        {% set current_rgb = state_attr(target_lights | first, 'rgb_color') | default([0, 0, 0]) %}
-                        {% set range_low = range(-45, -14) | random %}
-                        {% set range_high = range(15, 46) | random %}
-                        {% set hue_shift = ([range_low, range_high] | random) %}
-                        {% set saturation = (range(90, 100) | random) / 100 %}
-                        {% set lightness = 1 / 100 %}
-                        {% if (current_rgb[0] > 200 and current_rgb[1] > 200 and current_rgb[2] > 200) or not current_rgb %}
+                        {% set current_rgb = state_attr(target_lights | first, 'rgb_color') | default([255, 0, 0]) %}
+                        {% if not current_hs or not current_rgb %}
                           {% set new_hue = (range(0, 360) | random) %}
                         {% else %}
-                          {% if current_hs %}
-                            {% set new_hue = (current_hs[0] + hue_shift) % 360 %}
+                          {% set range_low = range(-45, -14) | random %}
+                          {% set range_high = range(15, 46) | random %}
+                          {% set hue_shift = ([range_low, range_high] | random) %}
+                          {% if (current_rgb[0] > 200 and current_rgb[1] > 200 and current_rgb[2] > 200) %}
+                            {% set new_hue = (range(0, 360) | random) %}
                           {% else %}
-                            {% set new_hue = 0 %}
+                            {% set new_hue = (current_hs[0] + hue_shift) % 360 %}
                           {% endif %}
                         {% endif %}
                         {% set hue = new_hue / 360 %}
@@ -411,20 +409,18 @@ action:
                             {% if color_mode == "random" %}
                               {{ range(0,255) | random, range(0,255) | random, range(0,255) | random }}
                             {% elif color_mode == "deep" %}
-                              {% set current_hs = state_attr(repeat.item, 'hs_color') %}
-                              {% set current_rgb = state_attr(repeat.item, 'rgb_color') %}
-                              {% set range_low = range(-45, -14) | random %}
-                              {% set range_high = range(15, 46) | random %}
-                              {% set hue_shift = ([range_low, range_high] | random) %}
-                              {% set saturation = (range(90, 100) | random) / 100 %}
-                              {% set lightness = 1 / 100 %}
-                              {% if (current_rgb[0] > 200 and current_rgb[1] > 200 and current_rgb[2] > 200) %}
+                              {% set current_hs = state_attr(repeat.item, 'hs_color') | default([0, 0]) %}
+                              {% set current_rgb = state_attr(repeat.item, 'rgb_color') | default([255, 0, 0]) %}
+                              {% if not current_hs or not current_rgb %}
                                 {% set new_hue = (range(0, 360) | random) %}
                               {% else %}
-                                {% if current_hs %}
-                                  {% set new_hue = (current_hs[0] + hue_shift) % 360 %}
+                                {% set range_low = range(-45, -14) | random %}
+                                {% set range_high = range(15, 46) | random %}
+                                {% set hue_shift = ([range_low, range_high] | random) %}
+                                {% if (current_rgb[0] > 200 and current_rgb[1] > 200 and current_rgb[2] > 200) %}
+                                  {% set new_hue = (range(0, 360) | random) %}
                                 {% else %}
-                                  {% set new_hue = 0 %}
+                                  {% set new_hue = (current_hs[0] + hue_shift) % 360 %}
                                 {% endif %}
                               {% endif %}
                               {% set hue = new_hue / 360 %}
