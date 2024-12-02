@@ -2,7 +2,7 @@ blueprint:
   name: Party Lights
   author: AntonH
   description: |
-    **Version 3.0.1**
+    **Version 3.0.2**
     Lights go to party mode (color loops or fade-in-and-out)
     ⚠️ **NOTE:** ⚠️
     *This automation is triggered by the status of a switch or an input_boolean entity.*
@@ -300,6 +300,8 @@ action:
                       {% elif color_mode == "deep" %}
                         {% set current_hs = state_attr(target_lights | first, 'hs_color') | default([0, 0]) %}
                         {% set current_rgb = state_attr(target_lights | first, 'rgb_color') | default([255, 0, 0]) %}
+                        {% set saturation = 1.0 %}  # Full saturation
+                        {% set lightness = 0.5 %}   # Mid lightness for vibrant colors
                         {% if not current_hs or not current_rgb %}
                           {% set new_hue = (range(0, 360) | random) %}
                         {% else %}
@@ -411,6 +413,8 @@ action:
                             {% elif color_mode == "deep" %}
                               {% set current_hs = state_attr(repeat.item, 'hs_color') | default([0, 0]) %}
                               {% set current_rgb = state_attr(repeat.item, 'rgb_color') | default([255, 0, 0]) %}
+                              {% set saturation = 1.0 %}  # Full saturation
+                              {% set lightness = 0.5 %}   # Mid lightness for vibrant colors
                               {% if not current_hs or not current_rgb %}
                                 {% set new_hue = (range(0, 360) | random) %}
                               {% else %}
