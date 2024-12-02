@@ -2,7 +2,7 @@ blueprint:
   name: Party Lights
   author: AntonH
   description: |
-    **Version 3.0.3**
+    **Version 3.0.4**
     Lights go to party mode (color loops or fade-in-and-out)
     ⚠️ **NOTE:** ⚠️
     *This automation is triggered by the status of a switch or an input_boolean entity.*
@@ -298,34 +298,23 @@ action:
                       {% if color_mode == "random" %}
                         {{ range(0,255) | random, range(0,255) | random, range(0,255) | random }}
                       {% elif color_mode == "deep" %}
-                        {% set current_hs = state_attr(target_lights | first, 'hs_color') | default([0, 0]) %}
-                        {% set current_rgb = state_attr(target_lights | first, 'rgb_color') | default([255, 0, 0]) %}
                         {% set saturation = 1.0 %}  # Full saturation
                         {% set lightness = 0.5 %}   # Mid lightness for vibrant colors
-                        {% set new_hue = range(0, 360) | random %}  # Always generate a new random hue
-                        {% set hue = new_hue / 360 %}
+                        {% set hue = range(0, 360) | random %}  # Random hue between 0-360
                         
-                        {% set c = (1 - (2 * lightness - 1)|abs) * saturation %}
-                        {% set x = c * (1 - (((hue * 360) / 60) % 2 - 1)|abs) %}
-                        {% set m = lightness - c / 2 %}
-                        
-                        {% if hue < 1/6 %}
-                          {% set r, g, b = c, x, 0 %}
-                        {% elif hue < 2/6 %}
-                          {% set r, g, b = x, c, 0 %}
-                        {% elif hue < 3/6 %}
-                          {% set r, g, b = 0, c, x %}
-                        {% elif hue < 4/6 %}
-                          {% set r, g, b = 0, x, c %}
-                        {% elif hue < 5/6 %}
-                          {% set r, g, b = x, 0, c %}
+                        {% if hue < 60 %}
+                          {% set r, g, b = 255, (hue * 4.25) | round(0), 0 %}  # Red to Yellow
+                        {% elif hue < 120 %}
+                          {% set r, g, b = (255 - ((hue - 60) * 4.25)) | round(0), 255, 0 %}  # Yellow to Green
+                        {% elif hue < 180 %}
+                          {% set r, g, b = 0, 255, ((hue - 120) * 4.25) | round(0) %}  # Green to Cyan
+                        {% elif hue < 240 %}
+                          {% set r, g, b = 0, (255 - ((hue - 180) * 4.25)) | round(0), 255 %}  # Cyan to Blue
+                        {% elif hue < 300 %}
+                          {% set r, g, b = ((hue - 240) * 4.25) | round(0), 0, 255 %}  # Blue to Magenta
                         {% else %}
-                          {% set r, g, b = c, 0, x %}
+                          {% set r, g, b = 255, 0, (255 - ((hue - 300) * 4.25)) | round(0) %}  # Magenta to Red
                         {% endif %}
-                        
-                        {% set r = ((r + m) * 255) | round(0) %}
-                        {% set g = ((g + m) * 255) | round(0) %}
-                        {% set b = ((b + m) * 255) | round(0) %}
                         
                         [{{ r }}, {{ g }}, {{ b }}]
                       {% elif color_mode == "christmas" %}  
@@ -397,34 +386,23 @@ action:
                             {% if color_mode == "random" %}
                               {{ range(0,255) | random, range(0,255) | random, range(0,255) | random }}
                             {% elif color_mode == "deep" %}
-                              {% set current_hs = state_attr(repeat.item, 'hs_color') | default([0, 0]) %}
-                              {% set current_rgb = state_attr(repeat.item, 'rgb_color') | default([255, 0, 0]) %}
                               {% set saturation = 1.0 %}  # Full saturation
                               {% set lightness = 0.5 %}   # Mid lightness for vibrant colors
-                              {% set new_hue = range(0, 360) | random %}  # Always generate a new random hue
-                              {% set hue = new_hue / 360 %}
+                              {% set hue = range(0, 360) | random %}  # Random hue between 0-360
                               
-                              {% set c = (1 - (2 * lightness - 1)|abs) * saturation %}
-                              {% set x = c * (1 - (((hue * 360) / 60) % 2 - 1)|abs) %}
-                              {% set m = lightness - c / 2 %}
-                              
-                              {% if hue < 1/6 %}
-                                {% set r, g, b = c, x, 0 %}
-                              {% elif hue < 2/6 %}
-                                {% set r, g, b = x, c, 0 %}
-                              {% elif hue < 3/6 %}
-                                {% set r, g, b = 0, c, x %}
-                              {% elif hue < 4/6 %}
-                                {% set r, g, b = 0, x, c %}
-                              {% elif hue < 5/6 %}
-                                {% set r, g, b = x, 0, c %}
+                              {% if hue < 60 %}
+                                {% set r, g, b = 255, (hue * 4.25) | round(0), 0 %}  # Red to Yellow
+                              {% elif hue < 120 %}
+                                {% set r, g, b = (255 - ((hue - 60) * 4.25)) | round(0), 255, 0 %}  # Yellow to Green
+                              {% elif hue < 180 %}
+                                {% set r, g, b = 0, 255, ((hue - 120) * 4.25) | round(0) %}  # Green to Cyan
+                              {% elif hue < 240 %}
+                                {% set r, g, b = 0, (255 - ((hue - 180) * 4.25)) | round(0), 255 %}  # Cyan to Blue
+                              {% elif hue < 300 %}
+                                {% set r, g, b = ((hue - 240) * 4.25) | round(0), 0, 255 %}  # Blue to Magenta
                               {% else %}
-                                {% set r, g, b = c, 0, x %}
+                                {% set r, g, b = 255, 0, (255 - ((hue - 300) * 4.25)) | round(0) %}  # Magenta to Red
                               {% endif %}
-                              
-                              {% set r = ((r + m) * 255) | round(0) %}
-                              {% set g = ((g + m) * 255) | round(0) %}
-                              {% set b = ((b + m) * 255) | round(0) %}
                               
                               [{{ r }}, {{ g }}, {{ b }}]
                             {% elif color_mode == "christmas" %}  
