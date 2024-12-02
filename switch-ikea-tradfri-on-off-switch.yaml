@@ -1,0 +1,88 @@
+blueprint:
+  name: Switch - IKEA TRADFRI - ON/OFF switch
+  description: 'Control your home with an IKEA TRADFRI ON/OFF switch,
+    for use with [ZHA](https://www.home-assistant.io/integrations/zha/).
+
+
+    Compatible with:
+    - IKEA TRADFRI ON/OFF switch (E1743)
+
+
+    Both buttons can be configured with short press and long press actions.
+
+
+    Each button can be configured independently:
+    - ON button: Short press and long press
+    - OFF button: Short press and long press'
+  domain: automation
+  input:
+    remote:
+      name: Remote
+      description: IKEA TRADFRI ON/OFF switch to use
+      selector:
+        device:
+          integration: "zha"
+          manufacturer: "IKEA of Sweden"
+          model: "TRADFRI on/off switch"
+          multiple: false
+    on_short:
+      name: ON button - short press
+      description: Action to run on short press of ON button
+      default: []
+      selector:
+        action: {}
+    on_long:
+      name: ON button - long press
+      description: Action to run on long press of ON button
+      default: []
+      selector:
+        action: {}
+    off_short:
+      name: OFF button - short press
+      description: Action to run on short press of OFF button
+      default: []
+      selector:
+        action: {}
+    off_long:
+      name: OFF button - long press
+      description: Action to run on long press of OFF button
+      default: []
+      selector:
+        action: {}
+  source_url: https://github.com/Baanaaana/ha-blueprint/tree/main
+mode: restart
+max_exceeded: silent
+trigger:
+  - platform: event
+    event_type: zha_event
+    event_data:
+      device_id: !input remote
+action:
+  - variables:
+      command: "{{ trigger.event.data.command }}"
+      cluster_id: "{{ trigger.event.data.cluster_id }}"
+      endpoint_id: "{{ trigger.event.data.endpoint_id }}"
+      args: "{{ trigger.event.data.args }}"
+  - choose:
+      # ON button
+      - conditions:  # Short press ON
+          - "{{ command == 'on' }}"
+          - "{{ cluster_id == 6 }}"
+          - "{{ endpoint_id == 1 }}"
+        sequence: !input on_short
+      - conditions:  # Long press ON
+          - "{{ command == 'move_with_on_off' }}"
+          - "{{ cluster_id == 8 }}"
+          - "{{ endpoint_id == 1 }}"
+        sequence: !input on_long
+      # OFF button
+      - conditions:  # Short press OFF
+          - "{{ command == 'off' }}"
+          - "{{ cluster_id == 6 }}"
+          - "{{ endpoint_id == 1 }}"
+        sequence: !input off_short
+      - conditions:  # Long press OFF
+          - "{{ command == 'move' }}"
+          - "{{ cluster_id == 8 }}"
+          - "{{ endpoint_id == 1 }}"
+        sequence: !input off_long 

@@ -1,104 +1,55 @@
 # Home Assistant Blueprints
 
-A collection of blueprints for Home Assistant automations.
+A collection of blueprints for Home Assistant.
 
-## Quick Links
-### Remote Controls
-- [IKEA STYRBAR - four button remote](#switch---ikea-styrbar---four-button-remote)
-- [IKEA SOMRIG - two button remote](#switch---ikea-somrig---two-button-remote)
-- [IKEA RODRET - two button remote](#switch---ikea-rodret---two-button-remote)
+## Available Blueprints
 
-## Remote Control Blueprints
+### IKEA Remotes
 
-### Switch - IKEA STYRBAR - four button remote
+- [IKEA RODRET Two Button Remote](./switch-ikea-rodret-two-button-remote.yaml)
+  - Compatible with IKEA RODRET dimmer/power switch (E2201)
+  - Supports short press, double press, long press and release after long press for both buttons
+  
+  [![Open your Home Assistant instance and show the blueprint import dialog with this blueprint pre-filled](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https://github.com/Baanaaana/ha-blueprint/blob/main/switch-ikea-rodret-two-button-remote.yaml)
 
-This blueprint allows you to control your home with an IKEA STYRBAR remote using ZHA integration. Each button on the remote (up, down, left, and right) can be configured with both short press and long press actions.
+- [IKEA SOMRIG Two Button Remote](./switch-ikea-somrig-two-button-remote.yaml)
+  - Compatible with IKEA SOMRIG shortcut button (E2213)
+  - Supports short press, double press, long press and release after long press for both buttons
+  
+  [![Open your Home Assistant instance and show the blueprint import dialog with this blueprint pre-filled](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https://github.com/Baanaaana/ha-blueprint/blob/main/switch-ikea-somrig-two-button-remote.yaml)
 
-#### Features
-- Configure actions for all 8 possible button combinations:
-  - Up button: Short press and long press
-  - Down button: Short press and long press
-  - Left button: Short press and long press
-  - Right button: Short press and long press
-- Assign any type of action to each button press:
-  - Turn lights on/off
-  - Activate scenes
-  - Run scripts
-  - Call services
-  - And more...
+- [IKEA STYRBAR Four Button Remote](./switch-ikea-styrbar-four-button-remote.yaml)
+  - Compatible with IKEA STYRBAR remote (E2001/E2002)
+  - Supports short press and long press for all four buttons
+  
+  [![Open your Home Assistant instance and show the blueprint import dialog with this blueprint pre-filled](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https://github.com/Baanaaana/ha-blueprint/blob/main/switch-ikea-styrbar-four-button-remote.yaml)
 
-#### Installation
-1. Add this blueprint repository to Home Assistant:
+- [IKEA TRADFRI ON/OFF Switch](./switch-ikea-tradfri-on-off-switch.yaml)
+  - Compatible with IKEA TRADFRI ON/OFF switch (E1743)
+  - Supports short press and long press for both ON and OFF buttons
+  
+  [![Open your Home Assistant instance and show the blueprint import dialog with this blueprint pre-filled](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https://github.com/Baanaaana/ha-blueprint/blob/main/switch-ikea-tradfri-on-off-switch.yaml)
 
-   [![Open your Home Assistant instance and show the blueprint import dialog with this blueprint pre-filled](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https://github.com/Baanaaana/ha-blueprint/blob/main/switch-ikea-styrbar-four-button-remote.yaml)
+## Installation
 
-2. Create a new automation using the blueprint
-3. Select your IKEA STYRBAR remote
-4. Configure the desired actions for each button press
+1. Click on the blueprint you want to use
+2. Click the "Raw" button
+3. Copy the URL
+4. Open Home Assistant
+5. Go to Configuration > Blueprints
+6. Click the "Import Blueprint" button
+7. Paste the URL and click "Preview"
+8. Click "Import Blueprint"
 
-#### Notes
-- For the left and right buttons, the "on" event is triggered before the long press event
-- Compatible with:
-  - IKEA STYRBAR remote (E2001/E2002)
-  - IKEA STYRBAR Remote control N2
+## Usage
 
-### Switch - IKEA SOMRIG - two button remote
+After importing a blueprint:
 
-This blueprint allows you to control your home with an IKEA SOMRIG remote using ZHA integration. Each button (single dot and double dot) can be configured with short press, double press, long press, and release after long press actions.
-
-#### Features
-- Configure actions for all 8 possible button combinations:
-  - Single dot button: Short press, double press, long press, and release
-  - Double dot button: Short press, double press, long press, and release
-- Assign any type of action to each button press:
-  - Turn lights on/off
-  - Activate scenes
-  - Run scripts
-  - Call services
-  - And more...
-
-#### Installation
-1. Add this blueprint repository to Home Assistant:
-
-   [![Open your Home Assistant instance and show the blueprint import dialog with this blueprint pre-filled](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https://github.com/Baanaaana/ha-blueprint/blob/main/switch-ikea-somrig-two-button-remote.yaml)
-
-2. Create a new automation using the blueprint
-3. Select your IKEA SOMRIG remote
-4. Configure the desired actions for each button press
-
-#### Notes
-- Compatible with:
-  - IKEA SOMRIG shortcut button
-  - IKEA SOMRIG shortcut button (E2213)
-
-### Switch - IKEA RODRET - two button remote
-
-This blueprint allows you to control your home with an IKEA RODRET remote using ZHA integration. Each button (top and bottom) can be configured with short press, long press, and release after long press actions.
-
-#### Features
-- Configure actions for all 6 possible button combinations:
-  - Top button: Short press, long press, and release after long press
-  - Bottom button: Short press, long press, and release after long press
-- Assign any type of action to each button press:
-  - Turn lights on/off
-  - Activate scenes
-  - Run scripts
-  - Call services
-  - And more...
-
-#### Installation
-1. Add this blueprint repository to Home Assistant:
-
-   [![Open your Home Assistant instance and show the blueprint import dialog with this blueprint pre-filled](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https://github.com/Baanaaana/ha-blueprint/blob/main/switch-ikea-rodret-two-button-remote.yaml)
-
-2. Create a new automation using the blueprint
-3. Select your IKEA RODRET remote
-4. Configure the desired actions for each button press
-
-#### Notes
-- Compatible with:
-  - IKEA RODRET Dimmer
-  - IKEA RODRET wireless dimmer/power switch (E2201)
+1. Create a new automation
+2. Choose the imported blueprint
+3. Select your remote device
+4. Configure the actions for each button press type
+5. Save the automation
 
 ## Support
 
