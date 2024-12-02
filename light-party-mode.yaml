@@ -2,7 +2,7 @@ blueprint:
   name: Party Lights
   author: AntonH
   description: |
-    **Version 3.0.7**
+    **Version 3.0.8**
     Lights go to party mode (color loops or fade-in-and-out)
     ⚠️ **NOTE:** ⚠️
     *This automation is triggered by the status of a switch or an input_boolean entity.*
@@ -359,24 +359,23 @@ action:
                             {% else %}
                               {{ fixed_brightness_pct }}
                             {% endif %}
-                          rgb_value: >
+                          rgb_value: >-
                             {% if color_mode == "random" %}
-                              {{ range(0,255) | random, range(0,255) | random, range(0,255) | random }}
+                              [{{ range(0,255) | random }}, {{ range(0,255) | random }}, {{ range(0,255) | random }}]
                             {% elif color_mode == "deep" %}
-                              {% set hue = range(0, 360) | random %}  # Random hue between 0-360
-                              
+                              {% set hue = range(0, 360) | random %}
                               {% if hue < 60 %}
-                                [255, {{ (hue * 4.25) | round(0) }}, 0]  # Red to Yellow
+                                [255, {{ (hue * 4.25) | round(0) }}, 0]
                               {% elif hue < 120 %}
-                                [{{ (255 - ((hue - 60) * 4.25)) | round(0) }}, 255, 0]  # Yellow to Green
+                                [{{ (255 - ((hue - 60) * 4.25)) | round(0) }}, 255, 0]
                               {% elif hue < 180 %}
-                                [0, 255, {{ ((hue - 120) * 4.25) | round(0) }}]  # Green to Cyan
+                                [0, 255, {{ ((hue - 120) * 4.25) | round(0) }}]
                               {% elif hue < 240 %}
-                                [0, {{ (255 - ((hue - 180) * 4.25)) | round(0) }}, 255]  # Cyan to Blue
+                                [0, {{ (255 - ((hue - 180) * 4.25)) | round(0) }}, 255]
                               {% elif hue < 300 %}
-                                [{{ ((hue - 240) * 4.25) | round(0) }}, 0, 255]  # Blue to Magenta
+                                [{{ ((hue - 240) * 4.25) | round(0) }}, 0, 255]
                               {% else %}
-                                [255, 0, {{ (255 - ((hue - 300) * 4.25)) | round(0) }}]  # Magenta to Red
+                                [255, 0, {{ (255 - ((hue - 300) * 4.25)) | round(0) }}]
                               {% endif %}
                             {% elif color_mode == "christmas" %}  
                               {% macro random_rgb_component(max) %}
