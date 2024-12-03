@@ -48,34 +48,33 @@ mode: restart
 max_exceeded: silent
 
 trigger:
-  - platform: event
-    event_type: zha_event
-    event_data:
-      device_id: !input sensor
+  # Contact sensor state changes
   - platform: state
-    entity_id: !input sensor
+    entity_id: binary_sensor.parasoll_contact
+  # Battery level monitoring
+  - platform: numeric_state
+    entity_id: sensor.parasoll_battery
+    attribute: battery_level
+    below: 15
 
 action:
-  - variables:
-      command: "{{ trigger.event.data.command }}"
-      cluster_id: "{{ trigger.event.data.cluster_id }}"
-      endpoint_id: "{{ trigger.event.data.endpoint_id }}"
-      args: "{{ trigger.event.data.args }}"
   - choose:
       # Opening detection
       - conditions:
-          - "{{ trigger.event.data.command == 'on' }}"
-          - "{{ trigger.event.data.cluster_id == 6 }}"
+          - condition: state
+            entity_id: binary_sensor.parasoll_contact
+            state: "on"
         sequence: !input on_open
       # Closing detection
       - conditions:
-          - "{{ trigger.event.data.command == 'off' }}"
-          - "{{ trigger.event.data.cluster_id == 6 }}"
+          - condition: state
+            entity_id: binary_sensor.parasoll_contact
+            state: "off"
         sequence: !input on_close
       # Battery warning
       - conditions:
           - condition: numeric_state
-            entity_id: !input sensor
+            entity_id: sensor.parasoll_battery
             attribute: battery_level
             below: 15
         sequence: !input battery_warning 
