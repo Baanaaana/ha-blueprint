@@ -30,13 +30,16 @@ A collection of blueprints for Home Assistant.
   
   [![Open your Home Assistant instance and show the blueprint import dialog with this blueprint pre-filled](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https://github.com/Baanaaana/ha-blueprint/blob/main/switch-ikea-styrbar-four-button-remote.yaml)
 
-- [IKEA TRADFRI ON/OFF Switch](./switch-ikea-tradfri-on-off-switch.yaml)
-  - Compatible with IKEA TRADFRI ON/OFF switch (E1743)
-  - Supports short press and long press for both ON and OFF buttons
+### IKEA Sensors
+
+- [IKEA PARASOLL Door/Window Sensor](./switch-ikea-parasoll-door-window-sensor.yaml)
+  - Compatible with IKEA PARASOLL door/window sensor (E2013)
+  - Triggers actions on opening and closing events
+  - Optional battery level warning actions
   
-  ![IKEA TRADFRI ON/OFF Switch](./images/ikea-tradfri-onoff.jpg)
+  ![IKEA PARASOLL Sensor](./images/ikea-parasoll.jpg)
   
-  [![Open your Home Assistant instance and show the blueprint import dialog with this blueprint pre-filled](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https://github.com/Baanaaana/ha-blueprint/blob/main/switch-ikea-tradfri-on-off-switch.yaml)
+  [![Open your Home Assistant instance and show the blueprint import dialog with this blueprint pre-filled](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https://github.com/Baanaaana/ha-blueprint/blob/main/switch-ikea-parasoll-door-window-sensor.yaml)
 
 ## Installation
 
