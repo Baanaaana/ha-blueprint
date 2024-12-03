@@ -3,7 +3,7 @@ blueprint:
   description: 'Control your home with an IKEA RODRET dimmer,
     for use with [ZHA](https://www.home-assistant.io/integrations/zha/).
 
-    Version: 1.0.1
+    Version: 1.0.0
 
     Compatible with:
     - IKEA RODRET Dimmer

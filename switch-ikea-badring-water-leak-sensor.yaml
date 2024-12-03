@@ -3,7 +3,7 @@ blueprint:
   description: 'Control your home with an IKEA BADRING water leak sensor,
     for use with [ZHA](https://www.home-assistant.io/integrations/zha/).
 
-    Version: 1.0.1
+    Version: 1.0.0
 
     Compatible with:
     - IKEA BADRING water leak sensor
@@ -78,8 +78,4 @@ action:
             entity_id: sensor.badring_battery
             attribute: battery_level
             below: 15
-        sequence:
-          - service: notify.persistent_notification
-            data:
-              title: "Battery is low!"
-              message: "{{ device_attr(!input sensor, 'name') }}"
+        sequence: !input battery_warning
