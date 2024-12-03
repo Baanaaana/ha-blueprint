@@ -3,7 +3,7 @@ blueprint:
   description: 'Control your home with an IKEA VALLHORN motion sensor,
     for use with [ZHA](https://www.home-assistant.io/integrations/zha/).
 
-    Version: 1.0.1
+    Version: 1.0.0
 
     Compatible with:
     - IKEA VALLHORN motion sensor
@@ -91,8 +91,4 @@ action:
             entity_id: sensor.vallhorn_battery
             attribute: battery_level
             below: 15
-        sequence:
-          - service: notify.persistent_notification
-            data:
-              title: "Battery is low!"
-              message: "{{ state_attr('binary_sensor.vallhorn_occupancy', 'friendly_name') }}"
+        sequence: !input battery_warning
