@@ -83,6 +83,12 @@ blueprint:
       default: []
       selector:
         action: {}
+    battery_warning:
+      name: Battery Warning
+      description: Optional - Action to run when battery is low
+      default: []
+      selector:
+        action: {}
   source_url: https://github.com/Baanaaana/ha-blueprint/tree/main
 mode: restart
 max_exceeded: silent
@@ -91,6 +97,10 @@ trigger:
     event_type: zha_event
     event_data:
       device_id: !input remote
+  - platform: numeric_state
+    entity_id: sensor.styrbar_battery
+    attribute: battery_level
+    below: 15
 action:
   - variables:
       command: "{{ trigger.event.data.command }}"
@@ -142,3 +152,9 @@ action:
           - "{{ endpoint_id == 1 }}"
           - "{{ args == [3328, 0] }}"
         sequence: !input button_right_long
+      - conditions:
+          - condition: numeric_state
+            entity_id: sensor.styrbar_battery
+            attribute: battery_level
+            below: 15
+        sequence: !input battery_warning

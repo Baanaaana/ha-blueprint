@@ -1,0 +1,94 @@
+blueprint:
+  name: Switch - IKEA VALLHORN - motion sensor
+  description: 'Control your home with an IKEA VALLHORN motion sensor,
+    for use with [ZHA](https://www.home-assistant.io/integrations/zha/).
+
+    Version: 1.0.0
+
+    Compatible with:
+    - IKEA VALLHORN motion sensor
+    - IKEA VALLHORN wireless motion sensor (E2134)
+
+
+    The sensor can trigger actions on:
+    - Motion detected
+    - No motion (configurable delay)
+    - Battery level warnings (optional)'
+  domain: automation
+  input:
+    sensor:
+      name: Sensor
+      description: IKEA VALLHORN sensor to use
+      selector:
+        device:
+          integration: "zha"
+          manufacturer: "IKEA of Sweden"
+          model: "VALLHORN Motion sensor"
+          multiple: false
+    on_motion:
+      name: On Motion
+      description: Action to run when motion is detected
+      default: []
+      selector:
+        action: {}
+    on_clear:
+      name: On Clear
+      description: Action to run when no motion is detected (after delay)
+      default: []
+      selector:
+        action: {}
+    no_motion_delay:
+      name: No Motion Delay
+      description: Time to wait before triggering the clear action after no motion is detected
+      default: 120
+      selector:
+        number:
+          min: 0
+          max: 3600
+          unit_of_measurement: seconds
+          mode: slider
+          step: 30
+    battery_warning:
+      name: Battery Warning
+      description: Optional - Action to run when battery is low
+      default: []
+      selector:
+        action: {}
+  source_url: https://github.com/Baanaaana/ha-blueprint/tree/main
+
+mode: restart
+max_exceeded: silent
+
+trigger:
+  # Motion detection
+  - platform: state
+    entity_id: binary_sensor.vallhorn_occupancy
+  # Battery level monitoring
+  - platform: numeric_state
+    entity_id: sensor.vallhorn_battery
+    attribute: battery_level
+    below: 15
+
+action:
+  - choose:
+      # Motion detected
+      - conditions:
+          - condition: state
+            entity_id: binary_sensor.vallhorn_occupancy
+            state: "on"
+        sequence: !input on_motion
+      # No motion (with delay)
+      - conditions:
+          - condition: state
+            entity_id: binary_sensor.vallhorn_occupancy
+            state: "off"
+            for:
+              seconds: !input no_motion_delay
+        sequence: !input on_clear
+      # Battery warning
+      - conditions:
+          - condition: numeric_state
+            entity_id: sensor.vallhorn_battery
+            attribute: battery_level
+            below: 15
+        sequence: !input battery_warning 

@@ -41,6 +41,16 @@ A collection of blueprints for Home Assistant.
   
   [![Open your Home Assistant instance and show the blueprint import dialog with this blueprint pre-filled](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https://github.com/Baanaaana/ha-blueprint/blob/main/switch-ikea-parasoll-door-window-sensor.yaml)
 
+- [IKEA VALLHORN Motion Sensor](./switch-ikea-vallhorn-motion-sensor.yaml)
+  - Compatible with IKEA VALLHORN motion sensor (E2134)
+  - Triggers actions on motion detection
+  - Configurable no-motion delay
+  - Optional battery level warning actions
+  
+  ![IKEA VALLHORN Sensor](./images/ikea-valhlhorn.jpg)
+  
+  [![Open your Home Assistant instance and show the blueprint import dialog with this blueprint pre-filled](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https://github.com/Baanaaana/ha-blueprint/blob/main/switch-ikea-vallhorn-motion-sensor.yaml)
+
 ## Installation
 
 1. Click on the blueprint you want to use
