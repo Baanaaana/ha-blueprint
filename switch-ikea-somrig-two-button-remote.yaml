@@ -3,7 +3,7 @@ blueprint:
   description: 'Control your home with an IKEA SOMRIG shortcut button,
     for use with [ZHA](https://www.home-assistant.io/integrations/zha/).
 
-    Version: 1.0.0
+    Version: 1.0.1
 
     Compatible with:
     - IKEA SOMRIG shortcut button
@@ -141,4 +141,8 @@ action:
             entity_id: sensor.somrig_battery
             attribute: battery_level
             below: 15
-        sequence: !input battery_warning
+        sequence:
+          - service: notify.persistent_notification
+            data:
+              title: "Battery is low!"
+              message: "{{ device_attr(!input remote, 'name') }}"
