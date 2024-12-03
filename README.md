@@ -47,7 +47,7 @@ A collection of blueprints for Home Assistant.
   - Configurable no-motion delay
   - Optional battery level warning actions
   
-  ![IKEA VALLHORN Sensor](./images/ikea-valhlhorn.jpg)
+  ![IKEA VALLHORN Sensor](./images/ikea-vallhorn.jpg)
   
   [![Open your Home Assistant instance and show the blueprint import dialog with this blueprint pre-filled](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https://github.com/Baanaaana/ha-blueprint/blob/main/switch-ikea-vallhorn-motion-sensor.yaml)
 
