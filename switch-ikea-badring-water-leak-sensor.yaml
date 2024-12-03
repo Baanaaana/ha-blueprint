@@ -1,0 +1,81 @@
+blueprint:
+  name: Switch - IKEA BADRING - Water Leak Sensor
+  description: 'Control your home with an IKEA BADRING water leak sensor,
+    for use with [ZHA](https://www.home-assistant.io/integrations/zha/).
+
+    Version: 1.0.0
+
+    Compatible with:
+    - IKEA BADRING water leak sensor
+    - IKEA BADRING wireless water leak sensor (E2202)
+
+
+    The sensor can trigger actions on:
+    - Water leak detected
+    - No water leak detected
+    - Battery level warnings (optional)'
+  domain: automation
+  input:
+    sensor:
+      name: Sensor
+      description: IKEA BADRING sensor to use
+      selector:
+        device:
+          integration: "zha"
+          manufacturer: "IKEA of Sweden"
+          model: "BADRING Water leakage sensor"
+          multiple: false
+    on_leak:
+      name: On Leak
+      description: Action to run when water leak is detected
+      default: []
+      selector:
+        action: {}
+    on_clear:
+      name: On Clear
+      description: Action to run when no water leak is detected
+      default: []
+      selector:
+        action: {}
+    battery_warning:
+      name: Battery Warning
+      description: Optional - Action to run when battery is low
+      default: []
+      selector:
+        action: {}
+  source_url: https://github.com/Baanaaana/ha-blueprint/tree/main
+
+mode: restart
+max_exceeded: silent
+
+trigger:
+  # Water leak detection
+  - platform: state
+    entity_id: binary_sensor.badring_water_leak
+  # Battery level monitoring
+  - platform: numeric_state
+    entity_id: sensor.badring_battery
+    attribute: battery_level
+    below: 15
+
+action:
+  - choose:
+      # Water leak detected
+      - conditions:
+          - condition: state
+            entity_id: binary_sensor.badring_water_leak
+            state: "on"
+        sequence: !input on_leak
+      # No water leak detected
+      - conditions:
+          - condition: state
+            entity_id: binary_sensor.badring_water_leak
+            state: "off"
+        sequence: !input on_clear
+      # Battery warning
+      - conditions:
+          - condition: numeric_state
+            entity_id: sensor.badring_battery
+            attribute: battery_level
+            below: 15
+        sequence: !input battery_warning 

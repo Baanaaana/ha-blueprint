@@ -54,6 +54,16 @@ A collection of blueprints for Home Assistant.
   
   [![Open your Home Assistant instance and show the blueprint import dialog with this blueprint pre-filled](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https://github.com/Baanaaana/ha-blueprint/blob/main/switch-ikea-vallhorn-motion-sensor.yaml)
 
+- [IKEA BADRING Water Leak Sensor](./switch-ikea-badring-water-leak-sensor.yaml)
+  - Compatible with IKEA BADRING water leak sensor (E2202)
+  - Triggers actions on water leak detection
+  - Triggers actions when water leak is cleared
+  - Optional battery level warning actions
+  
+  ![IKEA BADRING Sensor](./images/ikea-badring.jpg)
+  
+  [![Open your Home Assistant instance and show the blueprint import dialog with this blueprint pre-filled](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https://github.com/Baanaaana/ha-blueprint/blob/main/switch-ikea-badring-water-leak-sensor.yaml)
+
 ## Installation
 
 1. Click on the blueprint you want to use
