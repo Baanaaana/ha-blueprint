@@ -142,8 +142,4 @@ action:
             entity_id: sensor.rodret_battery
             attribute: battery_level
             below: 15
-        sequence:
-          - service: notify.persistent_notification
-            data:
-              title: "Battery is low!"
-              message: "{{ device_attr(!input remote, 'name') }}"
+        sequence: !input battery_warning
