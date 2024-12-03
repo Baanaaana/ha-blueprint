@@ -3,6 +3,7 @@ blueprint:
   description: 'Control your home with an IKEA PARASOLL door/window sensor,
     for use with [ZHA](https://www.home-assistant.io/integrations/zha/).
 
+    Version: 1.0.0
 
     Compatible with:
     - IKEA PARASOLL door/window sensor

@@ -3,6 +3,7 @@ blueprint:
   description: 'Control your home with an IKEA STYRBAR remote,
     for use with [ZHA](https://www.home-assistant.io/integrations/zha/).
 
+    Version: 1.0.0
 
     Compatible with:
     - IKEA STYRBAR remote (E2001/E2002)
