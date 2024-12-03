@@ -3,7 +3,7 @@ blueprint:
   description: 'Control your home with an IKEA STYRBAR remote,
     for use with [ZHA](https://www.home-assistant.io/integrations/zha/).
 
-    Version: 1.0.0
+    Version: 1.0.1
 
     Compatible with:
     - IKEA STYRBAR remote (E2001/E2002)
@@ -157,4 +157,8 @@ action:
             entity_id: sensor.styrbar_battery
             attribute: battery_level
             below: 15
-        sequence: !input battery_warning
+        sequence:
+          - service: notify.persistent_notification
+            data:
+              title: "Battery is low!"
+              message: "{{ state_attr(device_id, 'friendly_name') }}"
