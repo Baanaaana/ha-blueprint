@@ -33,6 +33,17 @@ A collection of blueprints for Home Assistant.
   
   [![Open your Home Assistant instance and show the blueprint import dialog with this blueprint pre-filled](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https://github.com/Baanaaana/ha-blueprint/blob/main/switch-ikea-styrbar-four-button-remote.yaml)
 
+### Philips Remotes
+
+- [Philips Hue Dimmer Switch](./switch-hue-dimmer-switch.yaml)
+  - Compatible with Philips Hue Dimmer Switch RWL020 (US) and RWL021 (EU)
+  - Supports short press, long press, and double press for all buttons
+  - Configurable actions for all four buttons
+  
+  ![Philips Hue Dimmer Switch](./images/hue-dimmer.jpg)
+  
+  [![Open your Home Assistant instance and show the blueprint import dialog with this blueprint pre-filled](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https://github.com/Baanaaana/ha-blueprint/blob/main/switch-hue-dimmer-switch.yaml)
+
 ### IKEA Sensors
 
 - [IKEA PARASOLL Door/Window Sensor](./switch-ikea-parasoll-door-window-sensor.yaml)
