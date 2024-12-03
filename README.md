@@ -9,6 +9,7 @@ A collection of blueprints for Home Assistant.
 - [IKEA RODRET Two Button Remote](./switch-ikea-rodret-two-button-remote.yaml)
   - Compatible with IKEA RODRET dimmer/power switch (E2201)
   - Supports short press, double press, long press and release after long press for both buttons
+  - Optional battery level warning actions
   
   ![IKEA RODRET Remote](./images/ikea-rodret.jpg)
   
@@ -17,6 +18,7 @@ A collection of blueprints for Home Assistant.
 - [IKEA SOMRIG Two Button Remote](./switch-ikea-somrig-two-button-remote.yaml)
   - Compatible with IKEA SOMRIG shortcut button (E2213)
   - Supports short press, double press, long press and release after long press for both buttons
+  - Optional battery level warning actions
   
   ![IKEA SOMRIG Remote](./images/ikea-somrig.jpg)
   
@@ -25,6 +27,7 @@ A collection of blueprints for Home Assistant.
 - [IKEA STYRBAR Four Button Remote](./switch-ikea-styrbar-four-button-remote.yaml)
   - Compatible with IKEA STYRBAR remote (E2001/E2002)
   - Supports short press and long press for all four buttons
+  - Optional battery level warning actions
   
   ![IKEA STYRBAR Remote](./images/ikea-styrbar.jpg)
   
