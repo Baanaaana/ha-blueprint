@@ -34,76 +34,76 @@ blueprint:
           multiple: false
     # Power button inputs
     power_press:
-      name: Power button - short press
+      name: "⭕ Power Button - Short Press"
       description: Action to run on short press of power button
       default: []
       selector:
         action: {}
     power_double:
-      name: Power button - double press
+      name: "⭕ Power Button - Double Press"
       description: Action to run on double press of power button
       default: []
       selector:
         action: {}
     power_triple:
-      name: Power button - triple press
+      name: "⭕ Power Button - Triple Press"
       description: Action to run on triple press of power button
       default: []
       selector:
         action: {}
     # Up button inputs
     up_press:
-      name: Up button - short press
+      name: "⬆️ Up Button - Short Press"
       description: Action to run on short press of up button
       default: []
       selector:
         action: {}
     up_double:
-      name: Up button - double press
+      name: "⬆️ Up Button - Double Press"
       description: Action to run on double press of up button
       default: []
       selector:
         action: {}
     up_triple:
-      name: Up button - triple press
+      name: "⬆️ Up Button - Triple Press"
       description: Action to run on triple press of up button
       default: []
       selector:
         action: {}
     # Down button inputs
     down_press:
-      name: Down button - short press
+      name: "⬇️ Down Button - Short Press"
       description: Action to run on short press of down button
       default: []
       selector:
         action: {}
     down_double:
-      name: Down button - double press
+      name: "⬇️ Down Button - Double Press"
       description: Action to run on double press of down button
       default: []
       selector:
         action: {}
     down_triple:
-      name: Down button - triple press
+      name: "⬇️ Down Button - Triple Press"
       description: Action to run on triple press of down button
       default: []
       selector:
         action: {}
     # Hue button inputs
     hue_press:
-      name: Hue button - short press
+      name: "🔆 Hue Button - Short Press"
       description: Action to run on short press of hue button
       default: []
       selector:
         action: {}
     hue_double:
-      name: Hue button - double press
+      name: "🔆 Hue Button - Double Press"
       description: Action to run on double press of hue button
       default: []
       selector:
         action: {}
     hue_triple:
-      name: Hue button - triple press
+      name: "🔆 Hue Button - Triple Press"
       description: Action to run on triple press of hue button
       default: []
       selector:

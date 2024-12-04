@@ -29,55 +29,55 @@ blueprint:
           model: "SOMRIG shortcut button"
           multiple: false
     single_dot_short:
-      name: Single dot - short press
+      name: "⚪ Single Dot - Short Press"
       description: Action to run on short press of single dot button
       default: []
       selector:
         action: {}
     single_dot_double:
-      name: Single dot - double press
+      name: "⚪ Single Dot - Double Press"
       description: Action to run on double press of single dot button
       default: []
       selector:
         action: {}
     single_dot_long:
-      name: Single dot - long press
+      name: "⚪ Single Dot - Long Press"
       description: Action to run on long press of single dot button
       default: []
       selector:
         action: {}
     single_dot_release:
-      name: Single dot - release after long press
+      name: "⚪ Single Dot - Release"
       description: Action to run when releasing after long press of single dot button
       default: []
       selector:
         action: {}
     double_dot_short:
-      name: Double dot - short press
+      name: "⚪⚪ Double Dot - Short Press"
       description: Action to run on short press of double dot button
       default: []
       selector:
         action: {}
     double_dot_double:
-      name: Double dot - double press
+      name: "⚪⚪ Double Dot - Double Press"
       description: Action to run on double press of double dot button
       default: []
       selector:
         action: {}
     double_dot_long:
-      name: Double dot - long press
+      name: "⚪⚪ Double Dot - Long Press"
       description: Action to run on long press of double dot button
       default: []
       selector:
         action: {}
     double_dot_release:
-      name: Double dot - release after long press
+      name: "⚪⚪ Double Dot - Release"
       description: Action to run when releasing after long press of double dot button
       default: []
       selector:
         action: {}
     battery_warning:
-      name: Battery Warning
+      name: "🔋 Battery Warning"
       description: Optional - Action to run when battery is low
       default: []
       selector:

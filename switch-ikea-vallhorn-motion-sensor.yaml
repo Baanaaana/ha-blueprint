@@ -26,20 +26,20 @@ blueprint:
           model: "VALLHORN Motion sensor"
           multiple: false
     on_motion:
-      name: On Motion
+      name: "👋 Motion Detected"
       description: Action to run when motion is detected
       default: []
       selector:
         action: {}
     on_clear:
-      name: On Clear
+      name: "🔍 No Motion"
       description: Action to run when no motion is detected (after delay)
       default: []
       selector:
         action: {}
     no_motion_delay:
-      name: No Motion Delay
-      description: Time to wait before triggering the clear action after no motion is detected
+      name: "⏱️ No Motion Delay"
+      description: Time to wait before triggering the clear action
       default: 120
       selector:
         number:
@@ -49,7 +49,7 @@ blueprint:
           mode: slider
           step: 30
     battery_warning:
-      name: Battery Warning
+      name: "🔋 Battery Warning"
       description: Optional - Action to run when battery is low
       default: []
       selector:

@@ -26,19 +26,19 @@ blueprint:
           model: "BADRING Water leakage sensor"
           multiple: false
     on_leak:
-      name: On Leak
+      name: "💧 Water Leak Detected"
       description: Action to run when water leak is detected
       default: []
       selector:
         action: {}
     on_clear:
-      name: On Clear
+      name: "✅ No Water Leak"
       description: Action to run when no water leak is detected
       default: []
       selector:
         action: {}
     battery_warning:
-      name: Battery Warning
+      name: "🔋 Battery Warning"
       description: Optional - Action to run when battery is low
       default: []
       selector:

@@ -26,19 +26,19 @@ blueprint:
           model: "PARASOLL Door/Window Sensor"
           multiple: false
     on_open:
-      name: On Open
+      name: "🚪 On Open"
       description: Action to run when the sensor detects opening
       default: []
       selector:
         action: {}
     on_close:
-      name: On Close
+      name: "🚪 On Close"
       description: Action to run when the sensor detects closing
       default: []
       selector:
         action: {}
     battery_warning:
-      name: Battery Warning
+      name: "🔋 Battery Warning"
       description: Optional - Action to run when battery is low
       default: []
       selector:

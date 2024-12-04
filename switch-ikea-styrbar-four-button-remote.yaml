@@ -34,57 +34,55 @@ blueprint:
           model: "Remote Control N2"
           multiple: false
     button_up_short:
-      name: Up button - short press
+      name: "⬆️ Up Button - Short Press"
       description: Action to run on short press of up button
       default: []
       selector:
         action: {}
     button_up_long:
-      name: Up button - long press
+      name: "⬆️ Up Button - Long Press"
       description: Action to run on long press of up button
       default: []
       selector:
         action: {}
     button_down_short:
-      name: Down button - short press
+      name: "⬇️ Down Button - Short Press"
       description: Action to run on short press of down button
       default: []
       selector:
         action: {}
     button_down_long:
-      name: Down button - long press
+      name: "⬇️ Down Button - Long Press"
       description: Action to run on long press of down button
       default: []
       selector:
         action: {}
     button_left_short:
-      name: Left button - short press
+      name: "⬅️ Left Button - Short Press"
       description: Action to run on short press of left button
       default: []
       selector:
         action: {}
     button_left_long:
-      name: Left button - long press
-      description: Action to run on long press of left button. Use with care, as before
-        the long press event is sent, the "on" event gets triggered.
+      name: "⬅️ Left Button - Long Press"
+      description: Action to run on long press of left button
       default: []
       selector:
         action: {}
     button_right_short:
-      name: Right button - short press
+      name: "➡️ Right Button - Short Press"
       description: Action to run on short press of right button
       default: []
       selector:
         action: {}
     button_right_long:
-      name: Right button - long press
-      description: Action to run on long press of right button. Use with care, as before
-        the long press event is sent, the "on" event gets triggered.
+      name: "➡️ Right Button - Long Press"
+      description: Action to run on long press of right button
       default: []
       selector:
         action: {}
     battery_warning:
-      name: Battery Warning
+      name: "🔋 Battery Warning"
       description: Optional - Action to run when battery is low
       default: []
       selector:
