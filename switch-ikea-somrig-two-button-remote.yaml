@@ -103,38 +103,50 @@ action:
       endpoint_id: "{{ trigger.event.data.endpoint_id }}"
       args: "{{ trigger.event.data.args }}"
   - choose:
-      - conditions:
+      # Single dot button actions
+      - conditions:  # Short press
           - "{{ command == 'short_release' }}"
           - "{{ endpoint_id == 1 }}"
         sequence: !input single_dot_short
-      - conditions:
+
+      - conditions:  # Double press
           - "{{ command == 'multi_press_complete' }}"
           - "{{ endpoint_id == 1 }}"
         sequence: !input single_dot_double
-      - conditions:
+
+      - conditions:  # Long press
           - "{{ command == 'long_press' }}"
           - "{{ endpoint_id == 1 }}"
         sequence: !input single_dot_long
-      - conditions:
+
+      - conditions:  # Release after long press
           - "{{ command == 'long_release' }}"
           - "{{ endpoint_id == 1 }}"
         sequence: !input single_dot_release
-      - conditions:
+
+
+      # Double dot button actions
+      - conditions:  # Short press
           - "{{ command == 'short_release' }}"
           - "{{ endpoint_id == 2 }}"
         sequence: !input double_dot_short
-      - conditions:
+
+      - conditions:  # Double press
           - "{{ command == 'multi_press_complete' }}"
           - "{{ endpoint_id == 2 }}"
         sequence: !input double_dot_double
-      - conditions:
+
+      - conditions:  # Long press
           - "{{ command == 'long_press' }}"
           - "{{ endpoint_id == 2 }}"
         sequence: !input double_dot_long
-      - conditions:
+
+      - conditions:  # Release after long press
           - "{{ command == 'long_release' }}"
           - "{{ endpoint_id == 2 }}"
         sequence: !input double_dot_release
+
+
       # Battery warning
       - conditions:
           - condition: numeric_state

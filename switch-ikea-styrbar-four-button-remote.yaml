@@ -90,8 +90,10 @@ blueprint:
       selector:
         action: {}
   source_url: https://github.com/Baanaaana/ha-blueprint/tree/main
+
 mode: restart
 max_exceeded: silent
+
 trigger:
   - platform: event
     event_type: zha_event
@@ -101,6 +103,7 @@ trigger:
     entity_id: sensor.styrbar_battery
     attribute: battery_level
     below: 15
+
 action:
   - variables:
       command: "{{ trigger.event.data.command }}"
@@ -108,50 +111,67 @@ action:
       endpoint_id: "{{ trigger.event.data.endpoint_id }}"
       args: "{{ trigger.event.data.args }}"
   - choose:
-      - conditions:
+      # Up button actions
+      - conditions:  # Short press
           - "{{ command == 'on' }}"
           - "{{ cluster_id == 6 }}"
           - "{{ endpoint_id == 1 }}"
         sequence: !input button_up_short
-      - conditions:
+
+      - conditions:  # Long press
           - "{{ command == 'move_with_on_off' }}"
           - "{{ cluster_id == 8 }}"
           - "{{ endpoint_id == 1 }}"
         sequence: !input button_up_long
-      - conditions:
+
+
+      # Down button actions
+      - conditions:  # Short press
           - "{{ command == 'off' }}"
           - "{{ cluster_id == 6 }}"
           - "{{ endpoint_id == 1 }}"
         sequence: !input button_down_short
-      - conditions:
+
+      - conditions:  # Long press
           - "{{ command == 'move' }}"
           - "{{ cluster_id == 8 }}"
           - "{{ endpoint_id == 1 }}"
         sequence: !input button_down_long
-      - conditions:
+
+
+      # Left button actions
+      - conditions:  # Short press
           - "{{ command == 'press' }}"
           - "{{ cluster_id == 5 }}"
           - "{{ endpoint_id == 1 }}"
           - "{{ args == [257, 13, 0] }}"
         sequence: !input button_left_short
-      - conditions:
+
+      - conditions:  # Long press
           - "{{ command == 'hold' }}"
           - "{{ cluster_id == 5 }}"
           - "{{ endpoint_id == 1 }}"
           - "{{ args == [3329, 0] }}"
         sequence: !input button_left_long
-      - conditions:
+
+
+      # Right button actions
+      - conditions:  # Short press
           - "{{ command == 'press' }}"
           - "{{ cluster_id == 5 }}"
           - "{{ endpoint_id == 1 }}"
           - "{{ args == [256, 13, 0] }}"
         sequence: !input button_right_short
-      - conditions:
+
+      - conditions:  # Long press
           - "{{ command == 'hold' }}"
           - "{{ cluster_id == 5 }}"
           - "{{ endpoint_id == 1 }}"
           - "{{ args == [3328, 0] }}"
         sequence: !input button_right_long
+
+
+      # Battery warning
       - conditions:
           - condition: numeric_state
             entity_id: sensor.styrbar_battery

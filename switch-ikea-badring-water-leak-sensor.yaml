@@ -59,19 +59,27 @@ trigger:
     below: 15
 
 action:
+  - variables:
+      command: "{{ trigger.event.data.command }}"
+      cluster_id: "{{ trigger.event.data.cluster_id }}"
+      endpoint_id: "{{ trigger.event.data.endpoint_id }}"
   - choose:
-      # Water leak detected
+      # Water leak detection
       - conditions:
           - condition: state
             entity_id: binary_sensor.badring_water_leak
             state: "on"
         sequence: !input on_leak
+
+
       # No water leak detected
       - conditions:
           - condition: state
             entity_id: binary_sensor.badring_water_leak
             state: "off"
         sequence: !input on_clear
+
+
       # Battery warning
       - conditions:
           - condition: numeric_state

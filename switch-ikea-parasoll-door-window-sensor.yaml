@@ -3,7 +3,7 @@ blueprint:
   description: 'Control your home with an IKEA PARASOLL door/window sensor,
     for use with [ZHA](https://www.home-assistant.io/integrations/zha/).
 
-    Version: 1.0.0
+    Version: 1.0.1
 
     Compatible with:
     - IKEA PARASOLL door/window sensor
@@ -72,12 +72,16 @@ action:
           - "{{ cluster_id == 6 }}"
           - "{{ endpoint_id == 1 }}"
         sequence: !input on_open
+
+
       # Closing detection
       - conditions:
           - "{{ command == 'off' }}"
           - "{{ cluster_id == 6 }}"
           - "{{ endpoint_id == 1 }}"
         sequence: !input on_close
+
+
       # Battery warning
       - conditions:
           - condition: numeric_state

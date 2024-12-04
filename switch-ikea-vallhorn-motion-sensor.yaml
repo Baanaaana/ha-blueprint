@@ -70,13 +70,19 @@ trigger:
     below: 15
 
 action:
+  - variables:
+      command: "{{ trigger.event.data.command }}"
+      cluster_id: "{{ trigger.event.data.cluster_id }}"
+      endpoint_id: "{{ trigger.event.data.endpoint_id }}"
   - choose:
-      # Motion detected
+      # Motion detection
       - conditions:
           - condition: state
             entity_id: binary_sensor.vallhorn_occupancy
             state: "on"
         sequence: !input on_motion
+
+
       # No motion (with delay)
       - conditions:
           - condition: state
@@ -85,6 +91,8 @@ action:
             for:
               seconds: !input no_motion_delay
         sequence: !input on_clear
+
+
       # Battery warning
       - conditions:
           - condition: numeric_state
