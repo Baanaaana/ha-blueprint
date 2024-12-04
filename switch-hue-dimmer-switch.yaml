@@ -3,6 +3,7 @@ blueprint:
   description: 'Control your home with a Philips Hue Dimmer Switch,
     for use with [ZHA](https://www.home-assistant.io/integrations/zha/).
 
+    Version: 1.0.0
 
     Compatible with:
     - Philips Hue Dimmer Switch RWL022 (v2)
