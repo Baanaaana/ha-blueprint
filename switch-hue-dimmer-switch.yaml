@@ -2,301 +2,319 @@ blueprint:
   name: Switch - Philips Hue Dimmer Switch
   description: 'Control your home with a Philips Hue Dimmer Switch,
     for use with [ZHA](https://www.home-assistant.io/integrations/zha/).
-    Philips Hue v2 Smart Dimmer Switch and Remote (RWL022) using Zigbee Home Automation
+
+
+    Compatible with:
+    - Philips Hue Dimmer Switch RWL022 (v2)
+    Note: This is for the newer model that says "hue" on the bottom.
+
+
+    All four buttons can be configured with multiple actions:
+    - Short press
+    - Double press
+    - Triple press
+    - Quadruple press
+    - Quintuple press
+    - Long press (hold)
+    - Release after short press
+    - Release after long press
+
+
+    Each button can be configured independently:
+    - Power button: All press types
+    - Up button: All press types
+    - Down button: All press types
+    - Hue button: All press types'
+  domain: automation
   input:
-    zha_device:
-      name: Philips Hue v2 Smart Dimmer Switch and Remote
-      description: List of available Philips Hue v2 Smart Dimmer Switch and Remote devices
+    remote:
+      name: Remote
+      description: Philips Hue Dimmer Switch to use
       selector:
         device:
-          integration: zha
-          model: RWL022
-    Power_Press:
-      name: Power Press
-      description: Power button pressed
+          integration: "zha"
+          manufacturer: "Signify Netherlands B.V."
+          model: "RWL022"
+          multiple: false
+    # Power button inputs
+    power_press:
+      name: Power button - short press
+      description: Action to run on short press of power button
       default: []
       selector:
-        action: null
-    Power_Press2x:
-      name: Power Press 2x
-      description: Power button pressed 2x
+        action: {}
+    power_double:
+      name: Power button - double press
+      description: Action to run on double press of power button
       default: []
       selector:
-        action: null
-    Power_Press3x:
-      name: Power Press 3x
-      description: Power button pressed 3x
+        action: {}
+    power_triple:
+      name: Power button - triple press
+      description: Action to run on triple press of power button
       default: []
       selector:
-        action: null
-    Power_Press4x:
-      name: Power Press 4x
-      description: Power button pressed 4x
+        action: {}
+    power_quadruple:
+      name: Power button - quadruple press
+      description: Action to run on quadruple press of power button
       default: []
       selector:
-        action: null
-    Power_Press5x:
-      name: Power Press 5x
-      description: Power button pressed 5x
+        action: {}
+    power_quintuple:
+      name: Power button - quintuple press
+      description: Action to run on quintuple press of power button
       default: []
       selector:
-        action: null
-    Power_Release:
-      name: Power Release
-      description: Power button released
+        action: {}
+    power_hold:
+      name: Power button - long press
+      description: Action to run on long press of power button
       default: []
       selector:
-        action: null
-    Power_HoldPress:
-      name: Power Hold
-      description: Power button held down
+        action: {}
+    power_release:
+      name: Power button - release after short press
+      description: Action to run on release after short press of power button
       default: []
       selector:
-        action: null
-    Power_HoldRelease:
-      name: Power Hold Release
-      description: Power button released after held down
+        action: {}
+    power_hold_release:
+      name: Power button - release after long press
+      description: Action to run on release after long press of power button
       default: []
       selector:
-        action: null
-    Up_Press:
-      name: Up Press
-      description: Up button pressed
+        action: {}
+    # Up button inputs
+    up_press:
+      name: Up button - short press
+      description: Action to run on short press of up button
       default: []
       selector:
-        action: null
-    Up_Press2x:
-      name: Up Press 2x
-      description: Up button pressed 2x
+        action: {}
+    up_double:
+      name: Up button - double press
+      description: Action to run on double press of up button
       default: []
       selector:
-        action: null
-    Up_Press3x:
-      name: Up Press 3x
-      description: Up button pressed 3x
+        action: {}
+    up_triple:
+      name: Up button - triple press
+      description: Action to run on triple press of up button
       default: []
       selector:
-        action: null
-    Up_Press4x:
-      name: Up Press 4x
-      description: Up button pressed 4x
+        action: {}
+    up_quadruple:
+      name: Up button - quadruple press
+      description: Action to run on quadruple press of up button
       default: []
       selector:
-        action: null
-    Up_Press5x:
-      name: Up Press 5x
-      description: Up button pressed 5x
+        action: {}
+    up_quintuple:
+      name: Up button - quintuple press
+      description: Action to run on quintuple press of up button
       default: []
       selector:
-        action: null
-    Up_Release:
-      name: Up Release
-      description: Up button released
+        action: {}
+    up_hold:
+      name: Up button - long press
+      description: Action to run on long press of up button
       default: []
       selector:
-        action: null
-    Up_HoldPress:
-      name: Up Hold
-      description: Up button held down
+        action: {}
+    up_release:
+      name: Up button - release after short press
+      description: Action to run on release after short press of up button
       default: []
       selector:
-        action: null
-    Up_HoldRelease:
-      name: Up Hold Release
-      description: Up button released after held down
+        action: {}
+    up_hold_release:
+      name: Up button - release after long press
+      description: Action to run on release after long press of up button
       default: []
       selector:
-        action: null
-    Down_Press:
-      name: Down Press
-      description: Down button pressed
+        action: {}
+    # Down button inputs
+    down_press:
+      name: Down button - short press
+      description: Action to run on short press of down button
       default: []
       selector:
-        action: null
-    Down_Press2x:
-      name: Down Press 2x
-      description: Down button pressed 2x
+        action: {}
+    down_double:
+      name: Down button - double press
+      description: Action to run on double press of down button
       default: []
       selector:
-        action: null
-    Down_Press3x:
-      name: Down Press 3x
-      description: Down button pressed 3x
+        action: {}
+    down_triple:
+      name: Down button - triple press
+      description: Action to run on triple press of down button
       default: []
       selector:
-        action: null
-    Down_Press4x:
-      name: Down Press 4x
-      description: Down button pressed 4x
+        action: {}
+    down_quadruple:
+      name: Down button - quadruple press
+      description: Action to run on quadruple press of down button
       default: []
       selector:
-        action: null
-    Down_Press5x:
-      name: Down Press 5x
-      description: Down button pressed 5x
+        action: {}
+    down_quintuple:
+      name: Down button - quintuple press
+      description: Action to run on quintuple press of down button
       default: []
       selector:
-        action: null
-    Down_Release:
-      name: Down Release
-      description: Down button released
+        action: {}
+    down_hold:
+      name: Down button - long press
+      description: Action to run on long press of down button
       default: []
       selector:
-        action: null
-    Down_HoldPress:
-      name: Down Hold
-      description: Down button held down
+        action: {}
+    down_release:
+      name: Down button - release after short press
+      description: Action to run on release after short press of down button
       default: []
       selector:
-        action: null
-    Down_HoldRelease:
-      name: Down Hold Release
-      description: Down button released after held down
+        action: {}
+    down_hold_release:
+      name: Down button - release after long press
+      description: Action to run on release after long press of down button
       default: []
       selector:
-        action: null
-    Hue_Press:
-      name: Hue Press
-      description: Hue button pressed
+        action: {}
+    # Hue button inputs
+    hue_press:
+      name: Hue button - short press
+      description: Action to run on short press of hue button
       default: []
       selector:
-        action: null
-    Hue_Press2x:
-      name: Hue Press 2x
-      description: Hue button pressed 2x
+        action: {}
+    hue_double:
+      name: Hue button - double press
+      description: Action to run on double press of hue button
       default: []
       selector:
-        action: null
-    Hue_Press3x:
-      name: Hue Press 3x
-      description: Hue button pressed 3x
+        action: {}
+    hue_triple:
+      name: Hue button - triple press
+      description: Action to run on triple press of hue button
       default: []
       selector:
-        action: null
-    Hue_Press4x:
-      name: Hue Press 4x
-      description: Hue button pressed 4x
+        action: {}
+    hue_quadruple:
+      name: Hue button - quadruple press
+      description: Action to run on quadruple press of hue button
       default: []
       selector:
-        action: null
-    Hue_Press5x:
-      name: Hue Press 5x
-      description: Hue button pressed 5x
+        action: {}
+    hue_quintuple:
+      name: Hue button - quintuple press
+      description: Action to run on quintuple press of hue button
       default: []
       selector:
-        action: null
-    Hue_Release:
-      name: Hue Release
-      description: Hue button released
+        action: {}
+    hue_hold:
+      name: Hue button - long press
+      description: Action to run on long press of hue button
       default: []
       selector:
-        action: null
-    Hue_HoldPress:
-      name: Hue Hold
-      description: Hue button held down
+        action: {}
+    hue_release:
+      name: Hue button - release after short press
+      description: Action to run on release after short press of hue button
       default: []
       selector:
-        action: null
-    Hue_HoldRelease:
-      name: Hue Hold Release
-      description: Hue button released after held down
+        action: {}
+    hue_hold_release:
+      name: Hue button - release after long press
+      description: Action to run on release after long press of hue button
       default: []
       selector:
-        action: null
-mode: single
+        action: {}
+  source_url: https://github.com/Baanaaana/ha-blueprint/tree/main
+
+mode: restart
 max_exceeded: silent
-variables:
-  device_id: !input "zha_device"
+
 trigger:
   - platform: event
     event_type: zha_event
-condition: "{{ trigger.event.data.device_id == device_id }}"
+    event_data:
+      device_id: !input remote
+
 action:
   - variables:
-      button: "{{ trigger.event.data.args.button }}"
-      press_type: "{{ trigger.event.data.args.press_type }}"
-      command_type: "{{ trigger.event.data.command }}"
-  - service: logbook.log
-    data:
-      name: Button
-      message: "{{ button }}"
-  - service: logbook.log
-    data:
-      name: Press Type
-      message: "{{ press_type }}"
-  - service: logbook.log
-    data:
-      name: Device
-      message: "{{ zha_device }}"
-  - service: logbook.log
-    data:
-      name: Command
-      message: "{{ command_type }}"
+      command: "{{ trigger.event.data.command }}"
   - choose:
-      - conditions: '{{ command_type == "on_press" }}'
-        sequence: !input "Power_Press"
-      - conditions: '{{ command_type == "on_double_press" }}'
-        sequence: !input "Power_Press2x"
-      - conditions: '{{ command_type == "on_triple_press" }}'
-        sequence: !input "Power_Press3x"
-      - conditions: '{{ command_type == "on_quadruple_press" }}'
-        sequence: !input "Power_Press4x"
-      - conditions: '{{ command_type == "on_quintuple_press" }}'
-        sequence: !input "Power_Press5x"
-      - conditions: '{{ command_type == "on_short_release" }}'
-        sequence: !input "Power_Release"
-      - conditions: '{{ command_type == "on_hold" }}'
-        sequence: !input "Power_HoldPress"
-      - conditions: '{{ command_type == "on_long_release" }}'
-        sequence: !input "Power_HoldRelease"
+      # Power button
+      - conditions: '{{ command == "on_press" }}'
+        sequence: !input power_press
+      - conditions: '{{ command == "on_double_press" }}'
+        sequence: !input power_double
+      - conditions: '{{ command == "on_triple_press" }}'
+        sequence: !input power_triple
+      - conditions: '{{ command == "on_quadruple_press" }}'
+        sequence: !input power_quadruple
+      - conditions: '{{ command == "on_quintuple_press" }}'
+        sequence: !input power_quintuple
+      - conditions: '{{ command == "on_hold" }}'
+        sequence: !input power_hold
+      - conditions: '{{ command == "on_short_release" }}'
+        sequence: !input power_release
+      - conditions: '{{ command == "on_long_release" }}'
+        sequence: !input power_hold_release
 
-      - conditions: '{{ command_type == "up_press" }}'
-        sequence: !input "Up_Press"
-      - conditions: '{{ command_type == "up_double_press" }}'
-        sequence: !input "Up_Press2x"
-      - conditions: '{{ command_type == "up_triple_press" }}'
-        sequence: !input "Up_Press3x"
-      - conditions: '{{ command_type == "up_quadruple_press" }}'
-        sequence: !input "Up_Press4x"
-      - conditions: '{{ command_type == "up_quintuple_press" }}'
-        sequence: !input "Up_Press5x"
-      - conditions: '{{ command_type == "up_short_release" }}'
-        sequence: !input "Up_Release"
-      - conditions: '{{ command_type == "up_hold" }}'
-        sequence: !input "Up_HoldPress"
-      - conditions: '{{ command_type == "up_long_release" }}'
-        sequence: !input "Up_HoldRelease"
+      # Up button
+      - conditions: '{{ command == "up_press" }}'
+        sequence: !input up_press
+      - conditions: '{{ command == "up_double_press" }}'
+        sequence: !input up_double
+      - conditions: '{{ command == "up_triple_press" }}'
+        sequence: !input up_triple
+      - conditions: '{{ command == "up_quadruple_press" }}'
+        sequence: !input up_quadruple
+      - conditions: '{{ command == "up_quintuple_press" }}'
+        sequence: !input up_quintuple
+      - conditions: '{{ command == "up_hold" }}'
+        sequence: !input up_hold
+      - conditions: '{{ command == "up_short_release" }}'
+        sequence: !input up_release
+      - conditions: '{{ command == "up_long_release" }}'
+        sequence: !input up_hold_release
 
-      - conditions: '{{ command_type == "down_press" }}'
-        sequence: !input "Down_Press"
-      - conditions: '{{ command_type == "down_double_press" }}'
-        sequence: !input "Down_Press2x"
-      - conditions: '{{ command_type == "down_triple_press" }}'
-        sequence: !input "Down_Press3x"
-      - conditions: '{{ command_type == "down_quadruple_press" }}'
-        sequence: !input "Down_Press4x"
-      - conditions: '{{ command_type == "down_quintuple_press" }}'
-        sequence: !input "Down_Press5x"
-      - conditions: '{{ command_type == "down_short_release" }}'
-        sequence: !input "Down_Release"
-      - conditions: '{{ command_type == "down_hold" }}'
-        sequence: !input "Down_HoldPress"
-      - conditions: '{{ command_type == "down_long_release" }}'
-        sequence: !input "Down_HoldRelease"
+      # Down button
+      - conditions: '{{ command == "down_press" }}'
+        sequence: !input down_press
+      - conditions: '{{ command == "down_double_press" }}'
+        sequence: !input down_double
+      - conditions: '{{ command == "down_triple_press" }}'
+        sequence: !input down_triple
+      - conditions: '{{ command == "down_quadruple_press" }}'
+        sequence: !input down_quadruple
+      - conditions: '{{ command == "down_quintuple_press" }}'
+        sequence: !input down_quintuple
+      - conditions: '{{ command == "down_hold" }}'
+        sequence: !input down_hold
+      - conditions: '{{ command == "down_short_release" }}'
+        sequence: !input down_release
+      - conditions: '{{ command == "down_long_release" }}'
+        sequence: !input down_hold_release
 
-      - conditions: '{{ command_type == "off_press" }}'
-        sequence: !input "Hue_Press"
-      - conditions: '{{ command_type == "off_double_press" }}'
-        sequence: !input "Hue_Press2x"
-      - conditions: '{{ command_type == "off_triple_press" }}'
-        sequence: !input "Hue_Press3x"
-      - conditions: '{{ command_type == "off_quadruple_press" }}'
-        sequence: !input "Hue_Press4x"
-      - conditions: '{{ command_type == "off_quintuple_press" }}'
-        sequence: !input "Hue_Press5x"
-      - conditions: '{{ command_type == "off_short_release" }}'
-        sequence: !input "Hue_Release"
-      - conditions: '{{ command_type == "off_hold" }}'
-        sequence: !input "Hue_HoldPress"
-      - conditions: '{{ command_type == "off_long_release" }}'
-        sequence: !input "Hue_HoldRelease"
+      # Hue button
+      - conditions: '{{ command == "off_press" }}'
+        sequence: !input hue_press
+      - conditions: '{{ command == "off_double_press" }}'
+        sequence: !input hue_double
+      - conditions: '{{ command == "off_triple_press" }}'
+        sequence: !input hue_triple
+      - conditions: '{{ command == "off_quadruple_press" }}'
+        sequence: !input hue_quadruple
+      - conditions: '{{ command == "off_quintuple_press" }}'
+        sequence: !input hue_quintuple
+      - conditions: '{{ command == "off_hold" }}'
+        sequence: !input hue_hold
+      - conditions: '{{ command == "off_short_release" }}'
+        sequence: !input hue_release
+      - conditions: '{{ command == "off_long_release" }}'
+        sequence: !input hue_hold_release
