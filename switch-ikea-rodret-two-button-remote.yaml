@@ -29,55 +29,55 @@ blueprint:
           model: "RODRET Dimmer"
           multiple: false
     top_short:
-      name: Top button - short press
+      name: "⬆️ Top Button - Short Press"
       description: Action to run on short press of top button
       default: []
       selector:
         action: {}
     top_double:
-      name: Top button - double press
+      name: "⬆️ Top Button - Double Press"
       description: Action to run on double press of top button
       default: []
       selector:
         action: {}
     top_long:
-      name: Top button - long press
+      name: "⬆️ Top Button - Long Press"
       description: Action to run on long press of top button
       default: []
       selector:
         action: {}
     top_release:
-      name: Top button - release after long press
+      name: "⬆️ Top Button - Release"
       description: Action to run when releasing after long press of top button
       default: []
       selector:
         action: {}
     bottom_short:
-      name: Bottom button - short press
+      name: "⬇️ Bottom Button - Short Press"
       description: Action to run on short press of bottom button
       default: []
       selector:
         action: {}
     bottom_double:
-      name: Bottom button - double press
+      name: "⬇️ Bottom Button - Double Press"
       description: Action to run on double press of bottom button
       default: []
       selector:
         action: {}
     bottom_long:
-      name: Bottom button - long press
+      name: "⬇️ Bottom Button - Long Press"
       description: Action to run on long press of bottom button
       default: []
       selector:
         action: {}
     bottom_release:
-      name: Bottom button - release after long press
+      name: "⬇️ Bottom Button - Release"
       description: Action to run when releasing after long press of bottom button
       default: []
       selector:
         action: {}
     battery_warning:
-      name: Battery Warning
+      name: "🔋 Battery Warning"
       description: Optional - Action to run when battery is low
       default: []
       selector:

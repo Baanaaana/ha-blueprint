@@ -18,34 +18,70 @@ blueprint:
   input:
     remote:
       name: Remote
-      description: IKEA TRADFRI ON/OFF switch to use
+      description: IKEA TRADFRI remote to use
       selector:
         device:
           integration: "zha"
           manufacturer: "IKEA of Sweden"
           model: "TRADFRI on/off switch"
           multiple: false
+
+    # On button actions
     on_short:
-      name: ON button - short press
-      description: Action to run on short press of ON button
+      name: "⚪ On Button - Short Press"
+      description: Action to run on short press of on button
+      default: []
+      selector:
+        action: {}
+    on_double:
+      name: "⚪ On Button - Double Press"
+      description: Action to run on double press of on button
       default: []
       selector:
         action: {}
     on_long:
-      name: ON button - long press
-      description: Action to run on long press of ON button
+      name: "⚪ On Button - Long Press"
+      description: Action to run on long press of on button
       default: []
       selector:
         action: {}
+    on_release:
+      name: "⚪ On Button - Release"
+      description: Action to run when releasing after long press of on button
+      default: []
+      selector:
+        action: {}
+
+    # Off button actions
     off_short:
-      name: OFF button - short press
-      description: Action to run on short press of OFF button
+      name: "⚫ Off Button - Short Press"
+      description: Action to run on short press of off button
+      default: []
+      selector:
+        action: {}
+    off_double:
+      name: "⚫ Off Button - Double Press"
+      description: Action to run on double press of off button
       default: []
       selector:
         action: {}
     off_long:
-      name: OFF button - long press
-      description: Action to run on long press of OFF button
+      name: "⚫ Off Button - Long Press"
+      description: Action to run on long press of off button
+      default: []
+      selector:
+        action: {}
+    off_release:
+      name: "⚫ Off Button - Release"
+      description: Action to run when releasing after long press of off button
+      default: []
+      selector:
+        action: {}
+
+    # Battery warning
+    battery_warning:
+      name: "🔋 Battery Warning"
+      description: Optional - Action to run when battery is low
       default: []
       selector:
         action: {}
