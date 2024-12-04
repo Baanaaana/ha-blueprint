@@ -9,15 +9,10 @@ blueprint:
     Note: This is for the newer model that says "hue" on the bottom.
 
 
-    All four buttons can be configured with multiple actions:
+    All four buttons can be configured with:
     - Short press
     - Double press
     - Triple press
-    - Quadruple press
-    - Quintuple press
-    - Long press (hold)
-    - Release after short press
-    - Release after long press
 
 
     Each button can be configured independently:
@@ -55,36 +50,6 @@ blueprint:
       default: []
       selector:
         action: {}
-    power_quadruple:
-      name: Power button - quadruple press
-      description: Action to run on quadruple press of power button
-      default: []
-      selector:
-        action: {}
-    power_quintuple:
-      name: Power button - quintuple press
-      description: Action to run on quintuple press of power button
-      default: []
-      selector:
-        action: {}
-    power_hold:
-      name: Power button - long press
-      description: Action to run on long press of power button
-      default: []
-      selector:
-        action: {}
-    power_release:
-      name: Power button - release after short press
-      description: Action to run on release after short press of power button
-      default: []
-      selector:
-        action: {}
-    power_hold_release:
-      name: Power button - release after long press
-      description: Action to run on release after long press of power button
-      default: []
-      selector:
-        action: {}
     # Up button inputs
     up_press:
       name: Up button - short press
@@ -101,36 +66,6 @@ blueprint:
     up_triple:
       name: Up button - triple press
       description: Action to run on triple press of up button
-      default: []
-      selector:
-        action: {}
-    up_quadruple:
-      name: Up button - quadruple press
-      description: Action to run on quadruple press of up button
-      default: []
-      selector:
-        action: {}
-    up_quintuple:
-      name: Up button - quintuple press
-      description: Action to run on quintuple press of up button
-      default: []
-      selector:
-        action: {}
-    up_hold:
-      name: Up button - long press
-      description: Action to run on long press of up button
-      default: []
-      selector:
-        action: {}
-    up_release:
-      name: Up button - release after short press
-      description: Action to run on release after short press of up button
-      default: []
-      selector:
-        action: {}
-    up_hold_release:
-      name: Up button - release after long press
-      description: Action to run on release after long press of up button
       default: []
       selector:
         action: {}
@@ -153,36 +88,6 @@ blueprint:
       default: []
       selector:
         action: {}
-    down_quadruple:
-      name: Down button - quadruple press
-      description: Action to run on quadruple press of down button
-      default: []
-      selector:
-        action: {}
-    down_quintuple:
-      name: Down button - quintuple press
-      description: Action to run on quintuple press of down button
-      default: []
-      selector:
-        action: {}
-    down_hold:
-      name: Down button - long press
-      description: Action to run on long press of down button
-      default: []
-      selector:
-        action: {}
-    down_release:
-      name: Down button - release after short press
-      description: Action to run on release after short press of down button
-      default: []
-      selector:
-        action: {}
-    down_hold_release:
-      name: Down button - release after long press
-      description: Action to run on release after long press of down button
-      default: []
-      selector:
-        action: {}
     # Hue button inputs
     hue_press:
       name: Hue button - short press
@@ -199,36 +104,6 @@ blueprint:
     hue_triple:
       name: Hue button - triple press
       description: Action to run on triple press of hue button
-      default: []
-      selector:
-        action: {}
-    hue_quadruple:
-      name: Hue button - quadruple press
-      description: Action to run on quadruple press of hue button
-      default: []
-      selector:
-        action: {}
-    hue_quintuple:
-      name: Hue button - quintuple press
-      description: Action to run on quintuple press of hue button
-      default: []
-      selector:
-        action: {}
-    hue_hold:
-      name: Hue button - long press
-      description: Action to run on long press of hue button
-      default: []
-      selector:
-        action: {}
-    hue_release:
-      name: Hue button - release after short press
-      description: Action to run on release after short press of hue button
-      default: []
-      selector:
-        action: {}
-    hue_hold_release:
-      name: Hue button - release after long press
-      description: Action to run on release after long press of hue button
       default: []
       selector:
         action: {}
@@ -254,16 +129,6 @@ action:
         sequence: !input power_double
       - conditions: '{{ command == "on_triple_press" }}'
         sequence: !input power_triple
-      - conditions: '{{ command == "on_quadruple_press" }}'
-        sequence: !input power_quadruple
-      - conditions: '{{ command == "on_quintuple_press" }}'
-        sequence: !input power_quintuple
-      - conditions: '{{ command == "on_hold" }}'
-        sequence: !input power_hold
-      - conditions: '{{ command == "on_short_release" }}'
-        sequence: !input power_release
-      - conditions: '{{ command == "on_long_release" }}'
-        sequence: !input power_hold_release
 
       # Up button
       - conditions: '{{ command == "up_press" }}'
@@ -272,16 +137,6 @@ action:
         sequence: !input up_double
       - conditions: '{{ command == "up_triple_press" }}'
         sequence: !input up_triple
-      - conditions: '{{ command == "up_quadruple_press" }}'
-        sequence: !input up_quadruple
-      - conditions: '{{ command == "up_quintuple_press" }}'
-        sequence: !input up_quintuple
-      - conditions: '{{ command == "up_hold" }}'
-        sequence: !input up_hold
-      - conditions: '{{ command == "up_short_release" }}'
-        sequence: !input up_release
-      - conditions: '{{ command == "up_long_release" }}'
-        sequence: !input up_hold_release
 
       # Down button
       - conditions: '{{ command == "down_press" }}'
@@ -290,16 +145,6 @@ action:
         sequence: !input down_double
       - conditions: '{{ command == "down_triple_press" }}'
         sequence: !input down_triple
-      - conditions: '{{ command == "down_quadruple_press" }}'
-        sequence: !input down_quadruple
-      - conditions: '{{ command == "down_quintuple_press" }}'
-        sequence: !input down_quintuple
-      - conditions: '{{ command == "down_hold" }}'
-        sequence: !input down_hold
-      - conditions: '{{ command == "down_short_release" }}'
-        sequence: !input down_release
-      - conditions: '{{ command == "down_long_release" }}'
-        sequence: !input down_hold_release
 
       # Hue button
       - conditions: '{{ command == "off_press" }}'
@@ -308,13 +153,3 @@ action:
         sequence: !input hue_double
       - conditions: '{{ command == "off_triple_press" }}'
         sequence: !input hue_triple
-      - conditions: '{{ command == "off_quadruple_press" }}'
-        sequence: !input hue_quadruple
-      - conditions: '{{ command == "off_quintuple_press" }}'
-        sequence: !input hue_quintuple
-      - conditions: '{{ command == "off_hold" }}'
-        sequence: !input hue_hold
-      - conditions: '{{ command == "off_short_release" }}'
-        sequence: !input hue_release
-      - conditions: '{{ command == "off_long_release" }}'
-        sequence: !input hue_hold_release
