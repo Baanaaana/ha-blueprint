@@ -33,6 +33,17 @@ A collection of blueprints for Home Assistant.
   
   [![Open your Home Assistant instance and show the blueprint import dialog with this blueprint pre-filled](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https://github.com/Baanaaana/ha-blueprint/blob/main/switch-ikea-styrbar-four-button-remote.yaml)
 
+### IKEA TRÅDFRI On/Off Switch
+
+- [IKEA TRÅDFRI On/Off Switch](./blueprints/switch-ikea-tradfri-on-off-switch.yaml)
+  - Compatible with IKEA TRÅDFRI On/Off Switch
+  - Provides simple on/off control for your devices
+  - Easy setup and integration
+  
+  ![IKEA TRÅDFRI On/Off Switch](./images/ikea-tradfri-onoff.jpg)
+  
+  [![Open your Home Assistant instance and show the blueprint import dialog with this blueprint pre-filled](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https://github.com/Baanaaana/ha-blueprint/blob/main/switch-ikea-tradfri-on-off-switch.yaml)
+
 ### Philips Remotes
 
 - [Philips Hue Dimmer Switch](./switch-hue-dimmer-switch.yaml)
