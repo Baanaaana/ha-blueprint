@@ -2,7 +2,6 @@ blueprint:
   name: VES-ZW-WAL-009 8-Button Wall Controller
   description: Control actions for each button press on the VES-ZW-WAL-009 8-button Z-Wave wall controller
   domain: automation
-  source_url: https://github.com/Baanaaana/ha-blueprint/tree/main
   input:
     wall_controller:
       name: Wall Controller Device
