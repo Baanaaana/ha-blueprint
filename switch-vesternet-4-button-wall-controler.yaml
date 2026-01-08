@@ -1,0 +1,103 @@
+blueprint:
+  name: VES-ZW-WAL-008 4-Button Wall Controller
+  description: Control actions for each button press on the VES-ZW-WAL-008 4-button Z-Wave wall controller
+  domain: automation
+  input:
+    wall_controller:
+      name: Wall Controller Device
+      description: Select the VES-ZW-WAL-008 wall controller device
+      selector:
+        device:
+          filter:
+            - integration: zwave_js
+              model: VES-ZW-WAL-008
+
+    scene_001_action:
+      name: Scene 001 Action
+      description: Action to run when Scene 001 button is pressed
+      default: []
+      selector:
+        action: {}
+
+    scene_002_action:
+      name: Scene 002 Action
+      description: Action to run when Scene 002 button is pressed
+      default: []
+      selector:
+        action: {}
+
+    scene_003_action:
+      name: Scene 003 Action
+      description: Action to run when Scene 003 button is pressed
+      default: []
+      selector:
+        action: {}
+
+    scene_004_action:
+      name: Scene 004 Action
+      description: Action to run when Scene 004 button is pressed
+      default: []
+      selector:
+        action: {}
+
+trigger:
+  - platform: event
+    event_type: zwave_js_value_notification
+    event_data:
+      device_id: !input wall_controller
+      property_name: scene
+      property_key_name: "001"
+      value: "KeyPressed"
+    id: scene_001
+
+  - platform: event
+    event_type: zwave_js_value_notification
+    event_data:
+      device_id: !input wall_controller
+      property_name: scene
+      property_key_name: "002"
+      value: "KeyPressed"
+    id: scene_002
+
+  - platform: event
+    event_type: zwave_js_value_notification
+    event_data:
+      device_id: !input wall_controller
+      property_name: scene
+      property_key_name: "003"
+      value: "KeyPressed"
+    id: scene_003
+
+  - platform: event
+    event_type: zwave_js_value_notification
+    event_data:
+      device_id: !input wall_controller
+      property_name: scene
+      property_key_name: "004"
+      value: "KeyPressed"
+    id: scene_004
+
+action:
+  - choose:
+      - conditions:
+          - condition: trigger
+            id: scene_001
+        sequence: !input scene_001_action
+
+      - conditions:
+          - condition: trigger
+            id: scene_002
+        sequence: !input scene_002_action
+
+      - conditions:
+          - condition: trigger
+            id: scene_003
+        sequence: !input scene_003_action
+
+      - conditions:
+          - condition: trigger
+            id: scene_004
+        sequence: !input scene_004_action
+
+mode: parallel
+max: 4
