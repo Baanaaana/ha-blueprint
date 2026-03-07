@@ -3,8 +3,8 @@ blueprint:
   description: >
     Trigger automations based on the DFRobot C4002 mmWave presence sensor (via ESPHome).
     Select your ESPHome device and all sensors are resolved automatically.
-    Supports triggering on presence/motion detection, disappearance, movement direction,
-    and optional distance thresholds.
+    Configure separate actions for when presence is detected and when presence is cleared.
+    Optionally filter by movement direction and detection distance.
   domain: automation
   author: RSVH
   homeassistant:
@@ -18,9 +18,9 @@ blueprint:
         device:
           integration: esphome
 
-    trigger_condition:
-      name: Trigger On
-      description: Which target status should trigger this automation?
+    presence_trigger:
+      name: Trigger Presence On
+      description: Which detection state counts as "presence detected"?
       default: any_presence
       selector:
         select:
@@ -31,19 +31,17 @@ blueprint:
               value: motion_only
             - label: "Static Presence Only"
               value: static_only
-            - label: "No Target (Cleared)"
-              value: no_target
 
     use_direction_filter:
       name: Filter by Movement Direction
-      description: Optionally restrict trigger to a specific movement direction.
+      description: Optionally restrict the presence trigger to a specific movement direction.
       default: false
       selector:
         boolean:
 
     required_direction:
       name: Required Direction
-      description: Only trigger if movement direction matches this value (requires direction filter enabled).
+      description: Only trigger presence actions if movement direction matches this value.
       default: "Approaching"
       selector:
         select:
@@ -57,14 +55,14 @@ blueprint:
 
     use_distance_filter:
       name: Filter by Presence Distance
-      description: Optionally restrict trigger to detections within a maximum distance.
+      description: Optionally restrict the presence trigger to detections within a maximum distance.
       default: false
       selector:
         boolean:
 
     max_distance_cm:
       name: Maximum Detection Distance (cm)
-      description: Only trigger if detected presence distance is within this value (requires distance filter enabled).
+      description: Only trigger presence actions if detected distance is within this value.
       default: 300
       selector:
         number:
@@ -75,9 +73,7 @@ blueprint:
 
     trigger_delay:
       name: Trigger Delay
-      description: >
-        Optional delay before the trigger fires. Useful to debounce quick
-        state changes (e.g., sensor flicker).
+      description: Optional delay before any action fires (debounce).
       default:
         hours: 0
         minutes: 0
@@ -85,21 +81,28 @@ blueprint:
       selector:
         duration:
 
-    actions:
-      name: Actions
-      description: Actions to run when the trigger condition is met.
+    presence_actions:
+      name: Actions — Presence Detected
+      description: Actions to run when presence (static or motion) is detected.
+      default: []
+      selector:
+        action:
+
+    no_presence_actions:
+      name: Actions — No Presence (Cleared)
+      description: Actions to run when no target is detected.
+      default: []
       selector:
         action:
 
 variables:
   esphome_device: !input esphome_device
-  trigger_condition: !input trigger_condition
+  presence_trigger: !input presence_trigger
   use_direction_filter: !input use_direction_filter
   required_direction: !input required_direction
   use_distance_filter: !input use_distance_filter
   max_distance_cm: !input max_distance_cm
 
-  # Resolve entity IDs from the selected device by matching entity names
   target_status_entity: >
     {{ device_entities(esphome_device)
        | select('search', 'target_status')
@@ -117,49 +120,68 @@ variables:
        | select('search', 'existing_distance')
        | list | first | default('') }}
 
+  # Resolved current status as integer
+  current_status: >
+    {% if target_status_entity != '' %}
+      {{ states(target_status_entity) | int(-1) }}
+    {% else %}
+      -1
+    {% endif %}
+
+  # True if current status matches the selected presence trigger
+  is_presence: >
+    {% if presence_trigger == 'any_presence' %}
+      {{ current_status in [1, 2] }}
+    {% elif presence_trigger == 'motion_only' %}
+      {{ current_status == 2 }}
+    {% elif presence_trigger == 'static_only' %}
+      {{ current_status == 1 }}
+    {% else %}
+      false
+    {% endif %}
+
+  # True if no target detected
+  is_no_presence: >
+    {{ current_status == 0 }}
+
 trigger:
+  - platform: state
+    entity_id: !input esphome_device
+    id: device_state_change
   - platform: template
     value_template: >
-      {% if target_status_entity == '' %}
-        false
-      {% else %}
-        {% set status = states(target_status_entity) | int(-1) %}
-        {% if trigger_condition == 'any_presence' %}
-          {{ status in [1, 2] }}
-        {% elif trigger_condition == 'motion_only' %}
-          {{ status == 2 }}
-        {% elif trigger_condition == 'static_only' %}
-          {{ status == 1 }}
-        {% elif trigger_condition == 'no_target' %}
-          {{ status == 0 }}
-        {% else %}
-          false
-        {% endif %}
-      {% endif %}
+      {{ target_status_entity != '' and
+         (states(target_status_entity) | int(-1)) in [-1, 0, 1, 2] }}
 
-condition:
-  - condition: template
-    value_template: >
-      {% if not use_direction_filter %}
-        true
-      {% elif direction_entity == '' %}
-        true
-      {% else %}
-        {{ states(direction_entity) == required_direction }}
-      {% endif %}
-
-  - condition: template
-    value_template: >
-      {% if not use_distance_filter %}
-        true
-      {% elif distance_entity == '' %}
-        true
-      {% else %}
-        {% set dist = states(distance_entity) | float(-1) %}
-        {{ dist >= 0 and dist <= max_distance_cm }}
-      {% endif %}
+condition: []
 
 action:
   - delay: !input trigger_delay
-  - choose: []
-    default: !input actions
+
+  - choose:
+      # Presence detected — with optional filters
+      - conditions:
+          - condition: template
+            value_template: "{{ is_presence }}"
+          - condition: template
+            value_template: >
+              {% if not use_direction_filter or direction_entity == '' %}
+                true
+              {% else %}
+                {{ states(direction_entity) == required_direction }}
+              {% endif %}
+          - condition: template
+            value_template: >
+              {% if not use_distance_filter or distance_entity == '' %}
+                true
+              {% else %}
+                {% set dist = states(distance_entity) | float(-1) %}
+                {{ dist >= 0 and dist <= max_distance_cm }}
+              {% endif %}
+        sequence: !input presence_actions
+
+      # No presence detected
+      - conditions:
+          - condition: template
+            value_template: "{{ is_no_presence }}"
+        sequence: !input no_presence_actions
