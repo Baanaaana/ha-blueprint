@@ -2,8 +2,8 @@ blueprint:
   name: DFRobot C4002 mmWave Presence Trigger
   description: >
     Trigger automations based on the DFRobot C4002 mmWave presence sensor (via ESPHome).
-    Select your ESPHome device and the Target Status sensor. Direction and distance sensors
-    are resolved automatically from the same device.
+    Select your ESPHome device and the "Target Status" text sensor.
+    All other sensors (direction, distance) are resolved automatically from the device.
     Configure separate actions for when presence is detected and when presence is cleared.
   domain: automation
   author: RSVH
@@ -13,7 +13,9 @@ blueprint:
   input:
     esphome_device:
       name: ESPHome C4002 Device
-      description: Select the ESPHome device with the DFRobot C4002 mmWave sensor.
+      description: >
+        Select the ESPHome device with the DFRobot C4002 mmWave sensor.
+        Direction and distance sensors are resolved automatically from this device.
       selector:
         device:
           integration: esphome
@@ -21,8 +23,8 @@ blueprint:
     target_status_entity:
       name: Target Status Sensor
       description: >
-        Select the "Target Status" sensor from your C4002 device.
-        (Values: 0 = No Target, 1 = Static Presence, 2 = Motion)
+        Select the "Target Status" text sensor from your C4002 device.
+        Expected states: "No Target", "Static Presence", "Motion".
       selector:
         entity:
           integration: esphome
@@ -116,7 +118,6 @@ variables:
   direction_entity: >
     {{ device_entities(esphome_device)
        | select('search', 'movement_direction')
-       | reject('search', 'number')
        | list | first | default('') }}
 
   distance_entity: >
@@ -124,21 +125,37 @@ variables:
        | select('search', 'existing_distance')
        | list | first | default('') }}
 
+  current_status: "{{ states(trigger.entity_id) }}"
+
+  is_presence: >
+    {% if presence_trigger == 'any_presence' %}
+      {{ current_status in ['Static Presence', 'Motion'] }}
+    {% elif presence_trigger == 'motion_only' %}
+      {{ current_status == 'Motion' }}
+    {% elif presence_trigger == 'static_only' %}
+      {{ current_status == 'Static Presence' }}
+    {% else %}
+      false
+    {% endif %}
+
+  is_no_presence: >
+    {{ current_status == 'No Target' }}
+
 trigger:
   - platform: state
     entity_id: !input target_status_entity
-    to: "1"
-    id: static_presence
-
-  - platform: state
-    entity_id: !input target_status_entity
-    to: "2"
-    id: motion_detected
-
-  - platform: state
-    entity_id: !input target_status_entity
-    to: "0"
+    to: "No Target"
     id: presence_cleared
+
+  - platform: state
+    entity_id: !input target_status_entity
+    to: "Static Presence"
+    id: presence_static
+
+  - platform: state
+    entity_id: !input target_status_entity
+    to: "Motion"
+    id: presence_motion
 
 condition: []
 
@@ -146,17 +163,15 @@ action:
   - delay: !input trigger_delay
 
   - choose:
-      # Presence detected
       - conditions:
           - condition: template
             value_template: >
-              {% set tid = trigger.id %}
               {% if presence_trigger == 'any_presence' %}
-                {{ tid in ['static_presence', 'motion_detected'] }}
+                {{ trigger.id in ['presence_static', 'presence_motion'] }}
               {% elif presence_trigger == 'motion_only' %}
-                {{ tid == 'motion_detected' }}
+                {{ trigger.id == 'presence_motion' }}
               {% elif presence_trigger == 'static_only' %}
-                {{ tid == 'static_presence' }}
+                {{ trigger.id == 'presence_static' }}
               {% else %}
                 false
               {% endif %}
@@ -177,7 +192,6 @@ action:
               {% endif %}
         sequence: !input presence_actions
 
-      # No presence
       - conditions:
           - condition: trigger
             id: presence_cleared
