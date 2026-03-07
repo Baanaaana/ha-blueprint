@@ -47,7 +47,7 @@ blueprint:
       description: >
         The "Movement Direction" text sensor from the C4002 ESPHome device.
         Required if direction filter is enabled.
-      default: {}
+      default: ""
       selector:
         entity:
           domain: sensor
@@ -59,9 +59,12 @@ blueprint:
       selector:
         select:
           options:
-            - "Approaching"
-            - "Away"
-            - "No Direction"
+            - label: "Approaching"
+              value: "Approaching"
+            - label: "Away"
+              value: "Away"
+            - label: "No Direction"
+              value: "No Direction"
 
     use_distance_filter:
       name: Filter by Presence Distance
@@ -76,7 +79,7 @@ blueprint:
       description: >
         The "Presence Distance" sensor from the C4002 ESPHome device (in cm).
         Required if distance filter is enabled.
-      default: {}
+      default: ""
       selector:
         entity:
           domain: sensor
@@ -110,7 +113,6 @@ blueprint:
       selector:
         action:
 
-# ─── Variables ────────────────────────────────────────────────────────────────
 variables:
   target_status_sensor: !input target_status_sensor
   trigger_condition: !input trigger_condition
@@ -121,14 +123,11 @@ variables:
   distance_sensor: !input distance_sensor
   max_distance_cm: !input max_distance_cm
 
-# ─── Triggers ─────────────────────────────────────────────────────────────────
 trigger:
   - platform: state
     entity_id: !input target_status_sensor
 
-# ─── Conditions ───────────────────────────────────────────────────────────────
 condition:
-  # 1. Target status condition
   - condition: template
     value_template: >
       {% set status = states(target_status_sensor) | int(-1) %}
@@ -144,7 +143,6 @@ condition:
         false
       {% endif %}
 
-  # 2. Optional direction filter
   - condition: template
     value_template: >
       {% if not use_direction_filter %}
@@ -153,7 +151,6 @@ condition:
         {{ states(direction_sensor) == required_direction }}
       {% endif %}
 
-  # 3. Optional distance filter
   - condition: template
     value_template: >
       {% if not use_distance_filter %}
@@ -163,10 +160,7 @@ condition:
         {{ dist >= 0 and dist <= max_distance_cm }}
       {% endif %}
 
-# ─── Delay (optional debounce) ────────────────────────────────────────────────
-sequence:
+action:
   - delay: !input trigger_delay
-
-  - choose: []  # pass-through, actions run below
-
-  - action: !input actions
+  - choose: []
+    default: !input actions
