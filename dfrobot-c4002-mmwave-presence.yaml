@@ -2,9 +2,9 @@ blueprint:
   name: DFRobot C4002 mmWave Presence Trigger
   description: >
     Trigger automations based on the DFRobot C4002 mmWave presence sensor (via ESPHome).
-    Select your ESPHome device and all sensors are resolved automatically.
+    Select your ESPHome device and the Target Status sensor. Direction and distance sensors
+    are resolved automatically from the same device.
     Configure separate actions for when presence is detected and when presence is cleared.
-    Optionally filter by movement direction and detection distance.
   domain: automation
   author: RSVH
   homeassistant:
@@ -17,6 +17,16 @@ blueprint:
       selector:
         device:
           integration: esphome
+
+    target_status_entity:
+      name: Target Status Sensor
+      description: >
+        Select the "Target Status" sensor from your C4002 device.
+        (Values: 0 = No Target, 1 = Static Presence, 2 = Motion)
+      selector:
+        entity:
+          integration: esphome
+          domain: sensor
 
     presence_trigger:
       name: Trigger Presence On
@@ -83,7 +93,7 @@ blueprint:
 
     presence_actions:
       name: Actions — Presence Detected
-      description: Actions to run when presence (static or motion) is detected.
+      description: Actions to run when presence is detected.
       default: []
       selector:
         action:
@@ -103,12 +113,6 @@ variables:
   use_distance_filter: !input use_distance_filter
   max_distance_cm: !input max_distance_cm
 
-  target_status_entity: >
-    {{ device_entities(esphome_device)
-       | select('search', 'target_status')
-       | reject('search', 'text')
-       | list | first | default('') }}
-
   direction_entity: >
     {{ device_entities(esphome_device)
        | select('search', 'movement_direction')
@@ -121,39 +125,19 @@ variables:
        | list | first | default('') }}
 
 trigger:
-  - platform: template
-    value_template: >
-      {% set entity = device_entities(esphome_device)
-         | select('search', 'target_status')
-         | reject('search', 'text')
-         | list | first | default('') %}
-      {% if entity == '' %}
-        false
-      {% else %}
-        {% set status = states(entity) | int(-1) %}
-        {% if presence_trigger == 'any_presence' %}
-          {{ status in [1, 2] }}
-        {% elif presence_trigger == 'motion_only' %}
-          {{ status == 2 }}
-        {% elif presence_trigger == 'static_only' %}
-          {{ status == 1 }}
-        {% else %}
-          false
-        {% endif %}
-      {% endif %}
-    id: presence_detected
+  - platform: state
+    entity_id: !input target_status_entity
+    to: "1"
+    id: static_presence
 
-  - platform: template
-    value_template: >
-      {% set entity = device_entities(esphome_device)
-         | select('search', 'target_status')
-         | reject('search', 'text')
-         | list | first | default('') %}
-      {% if entity == '' %}
-        false
-      {% else %}
-        {{ states(entity) | int(-1) == 0 }}
-      {% endif %}
+  - platform: state
+    entity_id: !input target_status_entity
+    to: "2"
+    id: motion_detected
+
+  - platform: state
+    entity_id: !input target_status_entity
+    to: "0"
     id: presence_cleared
 
 condition: []
@@ -162,9 +146,20 @@ action:
   - delay: !input trigger_delay
 
   - choose:
+      # Presence detected
       - conditions:
-          - condition: trigger
-            id: presence_detected
+          - condition: template
+            value_template: >
+              {% set tid = trigger.id %}
+              {% if presence_trigger == 'any_presence' %}
+                {{ tid in ['static_presence', 'motion_detected'] }}
+              {% elif presence_trigger == 'motion_only' %}
+                {{ tid == 'motion_detected' }}
+              {% elif presence_trigger == 'static_only' %}
+                {{ tid == 'static_presence' }}
+              {% else %}
+                false
+              {% endif %}
           - condition: template
             value_template: >
               {% if not use_direction_filter or direction_entity == '' %}
@@ -182,6 +177,7 @@ action:
               {% endif %}
         sequence: !input presence_actions
 
+      # No presence
       - conditions:
           - condition: trigger
             id: presence_cleared
