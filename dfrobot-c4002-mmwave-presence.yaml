@@ -2,6 +2,7 @@ blueprint:
   name: DFRobot C4002 mmWave Presence Trigger
   description: >
     Trigger automations based on the DFRobot C4002 mmWave presence sensor (via ESPHome).
+    Select your ESPHome device and all sensors are resolved automatically.
     Supports triggering on presence/motion detection, disappearance, movement direction,
     and optional distance thresholds.
   domain: automation
@@ -10,14 +11,12 @@ blueprint:
     min_version: "2024.6.0"
 
   input:
-    target_status_sensor:
-      name: Target Status Sensor (numeric)
-      description: >
-        The numeric "Target Status" sensor from the C4002 ESPHome device.
-        Values: 0 = No Target, 1 = Static Presence, 2 = Motion.
+    esphome_device:
+      name: ESPHome C4002 Device
+      description: Select the ESPHome device with the DFRobot C4002 mmWave sensor.
       selector:
-        entity:
-          domain: sensor
+        device:
+          integration: esphome
 
     trigger_condition:
       name: Trigger On
@@ -42,19 +41,9 @@ blueprint:
       selector:
         boolean:
 
-    direction_sensor:
-      name: Movement Direction Text Sensor
-      description: >
-        The "Movement Direction" text sensor from the C4002 ESPHome device.
-        Required if direction filter is enabled.
-      default: ""
-      selector:
-        entity:
-          domain: sensor
-
     required_direction:
       name: Required Direction
-      description: Only trigger if movement direction matches this value.
+      description: Only trigger if movement direction matches this value (requires direction filter enabled).
       default: "Approaching"
       selector:
         select:
@@ -68,25 +57,14 @@ blueprint:
 
     use_distance_filter:
       name: Filter by Presence Distance
-      description: >
-        Optionally restrict trigger to detections within a maximum distance.
+      description: Optionally restrict trigger to detections within a maximum distance.
       default: false
       selector:
         boolean:
 
-    distance_sensor:
-      name: Presence Distance Sensor
-      description: >
-        The "Presence Distance" sensor from the C4002 ESPHome device (in cm).
-        Required if distance filter is enabled.
-      default: ""
-      selector:
-        entity:
-          domain: sensor
-
     max_distance_cm:
       name: Maximum Detection Distance (cm)
-      description: Only trigger if detected presence distance is within this value.
+      description: Only trigger if detected presence distance is within this value (requires distance filter enabled).
       default: 300
       selector:
         number:
@@ -114,49 +92,70 @@ blueprint:
         action:
 
 variables:
-  target_status_sensor: !input target_status_sensor
+  esphome_device: !input esphome_device
   trigger_condition: !input trigger_condition
   use_direction_filter: !input use_direction_filter
-  direction_sensor: !input direction_sensor
   required_direction: !input required_direction
   use_distance_filter: !input use_distance_filter
-  distance_sensor: !input distance_sensor
   max_distance_cm: !input max_distance_cm
 
+  # Resolve entity IDs from the selected device by matching entity names
+  target_status_entity: >
+    {{ device_entities(esphome_device)
+       | select('search', 'target_status')
+       | reject('search', 'text')
+       | list | first | default('') }}
+
+  direction_entity: >
+    {{ device_entities(esphome_device)
+       | select('search', 'movement_direction')
+       | reject('search', 'number')
+       | list | first | default('') }}
+
+  distance_entity: >
+    {{ device_entities(esphome_device)
+       | select('search', 'existing_distance')
+       | list | first | default('') }}
+
 trigger:
-  - platform: state
-    entity_id: !input target_status_sensor
+  - platform: template
+    value_template: >
+      {% if target_status_entity == '' %}
+        false
+      {% else %}
+        {% set status = states(target_status_entity) | int(-1) %}
+        {% if trigger_condition == 'any_presence' %}
+          {{ status in [1, 2] }}
+        {% elif trigger_condition == 'motion_only' %}
+          {{ status == 2 }}
+        {% elif trigger_condition == 'static_only' %}
+          {{ status == 1 }}
+        {% elif trigger_condition == 'no_target' %}
+          {{ status == 0 }}
+        {% else %}
+          false
+        {% endif %}
+      {% endif %}
 
 condition:
   - condition: template
     value_template: >
-      {% set status = states(target_status_sensor) | int(-1) %}
-      {% if trigger_condition == 'any_presence' %}
-        {{ status in [1, 2] }}
-      {% elif trigger_condition == 'motion_only' %}
-        {{ status == 2 }}
-      {% elif trigger_condition == 'static_only' %}
-        {{ status == 1 }}
-      {% elif trigger_condition == 'no_target' %}
-        {{ status == 0 }}
-      {% else %}
-        false
-      {% endif %}
-
-  - condition: template
-    value_template: >
       {% if not use_direction_filter %}
         true
+      {% elif direction_entity == '' %}
+        true
       {% else %}
-        {{ states(direction_sensor) == required_direction }}
+        {{ states(direction_entity) == required_direction }}
       {% endif %}
 
   - condition: template
     value_template: >
       {% if not use_distance_filter %}
         true
+      {% elif distance_entity == '' %}
+        true
       {% else %}
-        {% set dist = states(distance_sensor) | float(-1) %}
+        {% set dist = states(distance_entity) | float(-1) %}
         {{ dist >= 0 and dist <= max_distance_cm }}
       {% endif %}
 
