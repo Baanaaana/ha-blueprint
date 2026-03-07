@@ -1,0 +1,172 @@
+blueprint:
+  name: DFRobot C4002 mmWave Presence Trigger
+  description: >
+    Trigger automations based on the DFRobot C4002 mmWave presence sensor (via ESPHome).
+    Supports triggering on presence/motion detection, disappearance, movement direction,
+    and optional distance thresholds.
+  domain: automation
+  author: RSVH
+  homeassistant:
+    min_version: "2024.6.0"
+
+  input:
+    target_status_sensor:
+      name: Target Status Sensor (numeric)
+      description: >
+        The numeric "Target Status" sensor from the C4002 ESPHome device.
+        Values: 0 = No Target, 1 = Static Presence, 2 = Motion.
+      selector:
+        entity:
+          domain: sensor
+
+    trigger_condition:
+      name: Trigger On
+      description: Which target status should trigger this automation?
+      default: any_presence
+      selector:
+        select:
+          options:
+            - label: "Any Presence (Static or Motion)"
+              value: any_presence
+            - label: "Motion Only"
+              value: motion_only
+            - label: "Static Presence Only"
+              value: static_only
+            - label: "No Target (Cleared)"
+              value: no_target
+
+    use_direction_filter:
+      name: Filter by Movement Direction
+      description: Optionally restrict trigger to a specific movement direction.
+      default: false
+      selector:
+        boolean:
+
+    direction_sensor:
+      name: Movement Direction Text Sensor
+      description: >
+        The "Movement Direction" text sensor from the C4002 ESPHome device.
+        Required if direction filter is enabled.
+      default: {}
+      selector:
+        entity:
+          domain: sensor
+
+    required_direction:
+      name: Required Direction
+      description: Only trigger if movement direction matches this value.
+      default: "Approaching"
+      selector:
+        select:
+          options:
+            - "Approaching"
+            - "Away"
+            - "No Direction"
+
+    use_distance_filter:
+      name: Filter by Presence Distance
+      description: >
+        Optionally restrict trigger to detections within a maximum distance.
+      default: false
+      selector:
+        boolean:
+
+    distance_sensor:
+      name: Presence Distance Sensor
+      description: >
+        The "Presence Distance" sensor from the C4002 ESPHome device (in cm).
+        Required if distance filter is enabled.
+      default: {}
+      selector:
+        entity:
+          domain: sensor
+
+    max_distance_cm:
+      name: Maximum Detection Distance (cm)
+      description: Only trigger if detected presence distance is within this value.
+      default: 300
+      selector:
+        number:
+          min: 10
+          max: 1000
+          step: 10
+          unit_of_measurement: cm
+
+    trigger_delay:
+      name: Trigger Delay
+      description: >
+        Optional delay before the trigger fires. Useful to debounce quick
+        state changes (e.g., sensor flicker).
+      default:
+        hours: 0
+        minutes: 0
+        seconds: 0
+      selector:
+        duration:
+
+    actions:
+      name: Actions
+      description: Actions to run when the trigger condition is met.
+      selector:
+        action:
+
+# ─── Variables ────────────────────────────────────────────────────────────────
+variables:
+  target_status_sensor: !input target_status_sensor
+  trigger_condition: !input trigger_condition
+  use_direction_filter: !input use_direction_filter
+  direction_sensor: !input direction_sensor
+  required_direction: !input required_direction
+  use_distance_filter: !input use_distance_filter
+  distance_sensor: !input distance_sensor
+  max_distance_cm: !input max_distance_cm
+
+# ─── Triggers ─────────────────────────────────────────────────────────────────
+trigger:
+  - platform: state
+    entity_id: !input target_status_sensor
+
+# ─── Conditions ───────────────────────────────────────────────────────────────
+condition:
+  # 1. Target status condition
+  - condition: template
+    value_template: >
+      {% set status = states(target_status_sensor) | int(-1) %}
+      {% if trigger_condition == 'any_presence' %}
+        {{ status in [1, 2] }}
+      {% elif trigger_condition == 'motion_only' %}
+        {{ status == 2 }}
+      {% elif trigger_condition == 'static_only' %}
+        {{ status == 1 }}
+      {% elif trigger_condition == 'no_target' %}
+        {{ status == 0 }}
+      {% else %}
+        false
+      {% endif %}
+
+  # 2. Optional direction filter
+  - condition: template
+    value_template: >
+      {% if not use_direction_filter %}
+        true
+      {% else %}
+        {{ states(direction_sensor) == required_direction }}
+      {% endif %}
+
+  # 3. Optional distance filter
+  - condition: template
+    value_template: >
+      {% if not use_distance_filter %}
+        true
+      {% else %}
+        {% set dist = states(distance_sensor) | float(-1) %}
+        {{ dist >= 0 and dist <= max_distance_cm }}
+      {% endif %}
+
+# ─── Delay (optional debounce) ────────────────────────────────────────────────
+sequence:
+  - delay: !input trigger_delay
+
+  - choose: []  # pass-through, actions run below
+
+  - action: !input actions
