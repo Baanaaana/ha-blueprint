@@ -120,38 +120,41 @@ variables:
        | select('search', 'existing_distance')
        | list | first | default('') }}
 
-  # Resolved current status as integer
-  current_status: >
-    {% if target_status_entity != '' %}
-      {{ states(target_status_entity) | int(-1) }}
-    {% else %}
-      -1
-    {% endif %}
-
-  # True if current status matches the selected presence trigger
-  is_presence: >
-    {% if presence_trigger == 'any_presence' %}
-      {{ current_status in [1, 2] }}
-    {% elif presence_trigger == 'motion_only' %}
-      {{ current_status == 2 }}
-    {% elif presence_trigger == 'static_only' %}
-      {{ current_status == 1 }}
-    {% else %}
-      false
-    {% endif %}
-
-  # True if no target detected
-  is_no_presence: >
-    {{ current_status == 0 }}
-
 trigger:
-  - platform: state
-    entity_id: !input esphome_device
-    id: device_state_change
   - platform: template
     value_template: >
-      {{ target_status_entity != '' and
-         (states(target_status_entity) | int(-1)) in [-1, 0, 1, 2] }}
+      {% set entity = device_entities(esphome_device)
+         | select('search', 'target_status')
+         | reject('search', 'text')
+         | list | first | default('') %}
+      {% if entity == '' %}
+        false
+      {% else %}
+        {% set status = states(entity) | int(-1) %}
+        {% if presence_trigger == 'any_presence' %}
+          {{ status in [1, 2] }}
+        {% elif presence_trigger == 'motion_only' %}
+          {{ status == 2 }}
+        {% elif presence_trigger == 'static_only' %}
+          {{ status == 1 }}
+        {% else %}
+          false
+        {% endif %}
+      {% endif %}
+    id: presence_detected
+
+  - platform: template
+    value_template: >
+      {% set entity = device_entities(esphome_device)
+         | select('search', 'target_status')
+         | reject('search', 'text')
+         | list | first | default('') %}
+      {% if entity == '' %}
+        false
+      {% else %}
+        {{ states(entity) | int(-1) == 0 }}
+      {% endif %}
+    id: presence_cleared
 
 condition: []
 
@@ -159,10 +162,9 @@ action:
   - delay: !input trigger_delay
 
   - choose:
-      # Presence detected — with optional filters
       - conditions:
-          - condition: template
-            value_template: "{{ is_presence }}"
+          - condition: trigger
+            id: presence_detected
           - condition: template
             value_template: >
               {% if not use_direction_filter or direction_entity == '' %}
@@ -180,8 +182,7 @@ action:
               {% endif %}
         sequence: !input presence_actions
 
-      # No presence detected
       - conditions:
-          - condition: template
-            value_template: "{{ is_no_presence }}"
+          - condition: trigger
+            id: presence_cleared
         sequence: !input no_presence_actions
