@@ -3,7 +3,7 @@ blueprint:
   description: >
     Trigger automations based on the DFRobot C4002 mmWave presence sensor (via ESPHome).
     Select your ESPHome device and the "Target Status" text sensor.
-    All other sensors (direction, distance) are resolved automatically from the device.
+    The direction sensor is resolved automatically from the device.
     Configure separate actions for when presence is detected and when presence is cleared.
   domain: automation
   author: RSVH
@@ -15,7 +15,7 @@ blueprint:
       name: ESPHome C4002 Device
       description: >
         Select the ESPHome device with the DFRobot C4002 mmWave sensor.
-        Direction and distance sensors are resolved automatically from this device.
+        The direction sensor is resolved automatically from this device.
       selector:
         device:
           integration: esphome
@@ -65,24 +65,6 @@ blueprint:
             - label: "No Direction"
               value: "No Direction"
 
-    use_distance_filter:
-      name: Filter by Presence Distance
-      description: Optionally restrict the presence trigger to detections within a maximum distance.
-      default: false
-      selector:
-        boolean:
-
-    max_distance_cm:
-      name: Maximum Detection Distance (cm)
-      description: Only trigger presence actions if detected distance is within this value.
-      default: 300
-      selector:
-        number:
-          min: 10
-          max: 1000
-          step: 10
-          unit_of_measurement: cm
-
     trigger_delay:
       name: Trigger Delay
       description: Optional delay before any action fires (debounce).
@@ -112,34 +94,11 @@ variables:
   presence_trigger: !input presence_trigger
   use_direction_filter: !input use_direction_filter
   required_direction: !input required_direction
-  use_distance_filter: !input use_distance_filter
-  max_distance_cm: !input max_distance_cm
 
   direction_entity: >
     {{ device_entities(esphome_device)
        | select('search', 'movement_direction')
        | list | first | default('') }}
-
-  distance_entity: >
-    {{ device_entities(esphome_device)
-       | select('search', 'existing_distance')
-       | list | first | default('') }}
-
-  current_status: "{{ states(trigger.entity_id) }}"
-
-  is_presence: >
-    {% if presence_trigger == 'any_presence' %}
-      {{ current_status in ['Static Presence', 'Motion'] }}
-    {% elif presence_trigger == 'motion_only' %}
-      {{ current_status == 'Motion' }}
-    {% elif presence_trigger == 'static_only' %}
-      {{ current_status == 'Static Presence' }}
-    {% else %}
-      false
-    {% endif %}
-
-  is_no_presence: >
-    {{ current_status == 'No Target' }}
 
 trigger:
   - platform: state
@@ -181,14 +140,6 @@ action:
                 true
               {% else %}
                 {{ states(direction_entity) == required_direction }}
-              {% endif %}
-          - condition: template
-            value_template: >
-              {% if not use_distance_filter or distance_entity == '' %}
-                true
-              {% else %}
-                {% set dist = states(distance_entity) | float(-1) %}
-                {{ dist >= 0 and dist <= max_distance_cm }}
               {% endif %}
         sequence: !input presence_actions
 
