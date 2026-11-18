@@ -110,7 +110,7 @@ blueprint:
         action: {}
   source_url: https://github.com/Baanaaana/ha-blueprint/tree/main
 
-mode: restart
+mode: parallel
 max_exceeded: silent
 
 trigger:
